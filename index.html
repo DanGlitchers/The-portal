@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>פורטל הקמע</title>
+    <title>פורטל הקמע - מסונכרן</title>
     <style>
         * {
             margin: 0;
@@ -315,6 +315,38 @@
             transform: translateY(-2px) scale(1.02);
         }
 
+        .status-indicator {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            border-radius: 20px;
+            color: white;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #4ade80;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 2.5em;
@@ -346,6 +378,11 @@
     </style>
 </head>
 <body>
+    <div class="status-indicator">
+        <div class="status-dot"></div>
+        <span id="statusText">מתחבר...</span>
+    </div>
+
     <div class="container">
         <div class="main-screen" id="mainScreen">
             <h1>🔮 פורטל הקמע 🔮</h1>
@@ -377,28 +414,57 @@
         </div>
     </div>
 
-    <script>
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getDatabase, ref, set, onValue, remove, onDisconnect } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+        // Firebase configuration - החלף עם הנתונים שלך מ-Firebase Console
+        const firebaseConfig = {
+            apiKey: "AIzaSyDT01Ij2DrfNYSMNubUze86pP9J4pHLD6U",
+            authDomain: "portal-game-eb63f.firebaseapp.com",
+            databaseURL: "https://portal-game-eb63f-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "portal-game-eb63f",
+            storageBucket: "portal-game-eb63f.firebasestorage.app",
+            messagingSenderId: "459065415227",
+            appId: "1:459065415227:web:e44499207338baa6baee1e"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
         const button = document.getElementById('fingerButton');
         const activeCountEl = document.getElementById('activeCount');
         const mainScreen = document.getElementById('mainScreen');
         const successScreen = document.getElementById('successScreen');
         const successMsg = document.getElementById('successMsg');
+        const statusText = document.getElementById('statusText');
         
         // Encoded message
         const e = [57,57,57,53,53,53,115,104,115,104,115,104];
         
-        let activePresses = new Set();
-        let pressTimers = {};
-        let nextPersonId = 1;
+        const myUserId = 'user_' + Math.random().toString(36).substr(2, 9);
+        const pressesRef = ref(database, 'presses');
+        const myPressRef = ref(database, 'presses/' + myUserId);
+        
+        let isPressing = false;
+        let currentPresses = {};
 
-        // Function to generate unique ID for each press
-        function generatePressId() {
-            return 'press_' + Date.now() + '_' + Math.random();
-        }
+        // Setup disconnect handler
+        onDisconnect(myPressRef).remove();
+
+        // Listen for changes in presses
+        onValue(pressesRef, (snapshot) => {
+            currentPresses = snapshot.val() || {};
+            updateDisplay();
+            statusText.textContent = 'מחובר ✓';
+        });
 
         // Update display
         function updateDisplay() {
-            const count = activePresses.size;
+            const count = Object.keys(currentPresses).length;
             activeCountEl.textContent = count;
             
             // Update progress bars
@@ -413,8 +479,15 @@
                 }
             }
 
+            // Update button appearance
+            if (count > 0) {
+                button.classList.add('pressing');
+            } else {
+                button.classList.remove('pressing');
+            }
+
             // Check if goal achieved
-            if (count >= 2) {
+            if (count >= 2 && mainScreen.style.display !== 'none') {
                 setTimeout(() => {
                     // Decode and show message
                     successMsg.textContent = String.fromCharCode(...e);
@@ -428,89 +501,55 @@
         // Mouse/Touch events
         button.addEventListener('mousedown', (e) => {
             e.preventDefault();
-            const pressId = generatePressId();
-            activePresses.add(pressId);
-            button.classList.add('pressing');
-            updateDisplay();
-
-            pressTimers[pressId] = setTimeout(() => {
-                // Keep the press active
-            }, 100);
-
-            // Store pressId on the button for this specific press
-            button.dataset.currentPressId = pressId;
+            if (!isPressing) {
+                isPressing = true;
+                set(myPressRef, {
+                    timestamp: Date.now(),
+                    userId: myUserId
+                });
+            }
         });
 
         button.addEventListener('mouseup', () => {
-            const pressId = button.dataset.currentPressId;
-            if (pressId) {
-                activePresses.delete(pressId);
-                if (pressTimers[pressId]) {
-                    clearTimeout(pressTimers[pressId]);
-                    delete pressTimers[pressId];
-                }
-                delete button.dataset.currentPressId;
+            if (isPressing) {
+                isPressing = false;
+                remove(myPressRef);
             }
-            
-            if (activePresses.size === 0) {
-                button.classList.remove('pressing');
-            }
-            updateDisplay();
         });
 
         button.addEventListener('mouseleave', () => {
-            const pressId = button.dataset.currentPressId;
-            if (pressId) {
-                activePresses.delete(pressId);
-                if (pressTimers[pressId]) {
-                    clearTimeout(pressTimers[pressId]);
-                    delete pressTimers[pressId];
-                }
-                delete button.dataset.currentPressId;
+            if (isPressing) {
+                isPressing = false;
+                remove(myPressRef);
             }
-            
-            if (activePresses.size === 0) {
-                button.classList.remove('pressing');
-            }
-            updateDisplay();
         });
 
         // Touch support for mobile
         button.addEventListener('touchstart', (e) => {
             e.preventDefault();
-            // Support multiple touches
-            for (let touch of e.changedTouches) {
-                const pressId = 'touch_' + touch.identifier;
-                activePresses.add(pressId);
-                button.classList.add('pressing');
+            if (!isPressing) {
+                isPressing = true;
+                set(myPressRef, {
+                    timestamp: Date.now(),
+                    userId: myUserId
+                });
             }
-            updateDisplay();
         });
 
         button.addEventListener('touchend', (e) => {
             e.preventDefault();
-            for (let touch of e.changedTouches) {
-                const pressId = 'touch_' + touch.identifier;
-                activePresses.delete(pressId);
+            if (isPressing) {
+                isPressing = false;
+                remove(myPressRef);
             }
-            
-            if (activePresses.size === 0) {
-                button.classList.remove('pressing');
-            }
-            updateDisplay();
         });
 
         button.addEventListener('touchcancel', (e) => {
             e.preventDefault();
-            for (let touch of e.changedTouches) {
-                const pressId = 'touch_' + touch.identifier;
-                activePresses.delete(pressId);
+            if (isPressing) {
+                isPressing = false;
+                remove(myPressRef);
             }
-            
-            if (activePresses.size === 0) {
-                button.classList.remove('pressing');
-            }
-            updateDisplay();
         });
 
         // Create confetti effect
@@ -534,15 +573,21 @@
         }
 
         // Reset game
-        function resetGame() {
-            activePresses.clear();
-            pressTimers = {};
-            nextPersonId = 1;
-            button.classList.remove('pressing');
+        window.resetGame = function() {
+            // Clear all presses
+            set(pressesRef, null);
+            isPressing = false;
             mainScreen.style.display = 'block';
             successScreen.style.display = 'none';
             updateDisplay();
         }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (isPressing) {
+                remove(myPressRef);
+            }
+        });
     </script>
 </body>
 </html>
