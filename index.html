@@ -1,47 +1,433 @@
 <!DOCTYPE html>
-<html lang="en">
+<html dir="rtl" lang="he">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi-Person Button Press</title>
+    <title>פורטל הקמע</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
+            overflow: hidden;
         }
-        button {
+
+        .container {
+            text-align: center;
             padding: 20px;
-            font-size: 24px;
-            margin: 10px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: white;
-            transition: background-color 0.3s;
         }
-        button:hover {
-            background-color: #0056b3;
+
+        .main-screen {
+            display: block;
+        }
+
+        .success-screen {
+            display: none;
+        }
+
+        h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .instruction {
+            color: #f0f0f0;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .counter {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        .counter-text {
+            color: white;
+            font-size: 3em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .counter-label {
+            color: #f0f0f0;
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+
+        #fingerButton {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            font-size: 8em;
+            cursor: pointer;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        #fingerButton:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+        }
+
+        #fingerButton:active {
+            transform: scale(0.95);
+        }
+
+        #fingerButton.pressing {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+            animation: pulse 0.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .progress-bars {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .progress-bar {
+            width: 60px;
+            height: 200px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .progress-fill {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: linear-gradient(180deg, #4ade80 0%, #22c55e 100%);
+            transition: height 0.3s ease;
+            border-radius: 30px;
+        }
+
+        .person-number {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-weight: bold;
+            font-size: 1.2em;
+            z-index: 1;
+        }
+
+        .success-message {
+            color: white;
+            font-size: 3em;
+            font-weight: bold;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            animation: celebration 2s infinite;
+        }
+
+        @keyframes celebration {
+            0%, 100% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(1.1) rotate(-5deg);
+            }
+            75% {
+                transform: scale(1.1) rotate(5deg);
+            }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ffd700;
+            position: absolute;
+            animation: confetti-fall 3s linear infinite;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        .reset-button {
+            margin-top: 30px;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .reset-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            
+            .counter-text {
+                font-size: 2em;
+            }
+            
+            #fingerButton {
+                width: 200px;
+                height: 200px;
+                font-size: 6em;
+            }
+            
+            .progress-bar {
+                width: 50px;
+                height: 150px;
+            }
+            
+            .success-message {
+                font-size: 2em;
+            }
         }
     </style>
 </head>
 <body>
-    <button id="button1">Press Me!</button>
-    <button id="button2">Press Me Too!</button>
+    <div class="container">
+        <div class="main-screen" id="mainScreen">
+            <h1>🔮 פורטל הקמע 🔮</h1>
+            <p class="instruction">לחצו יחד על הכפתור (לחיצה ארוכה) - 5 אנשים חייבים ללחוץ בו זמנית!</p>
+            
+            <div class="counter">
+                <div class="counter-text"><span id="activeCount">0</span> / 5</div>
+                <div class="counter-label">אנשים לוחצים כרגע</div>
+            </div>
+
+            <button id="fingerButton">👆</button>
+
+            <div class="progress-bars">
+                <div class="progress-bar">
+                    <div class="person-number">1</div>
+                    <div class="progress-fill" id="progress1"></div>
+                </div>
+                <div class="progress-bar">
+                    <div class="person-number">2</div>
+                    <div class="progress-fill" id="progress2"></div>
+                </div>
+                <div class="progress-bar">
+                    <div class="person-number">3</div>
+                    <div class="progress-fill" id="progress3"></div>
+                </div>
+                <div class="progress-bar">
+                    <div class="person-number">4</div>
+                    <div class="progress-fill" id="progress4"></div>
+                </div>
+                <div class="progress-bar">
+                    <div class="person-number">5</div>
+                    <div class="progress-fill" id="progress5"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="success-screen" id="successScreen">
+            <div class="success-message">
+                🎉 פתחתם את הפורטל והוצאתם את הקמע! 🎉
+            </div>
+            <button class="reset-button" onclick="resetGame()">התחל מחדש</button>
+        </div>
+    </div>
+
     <script>
-        let count1 = 0;
-        let count2 = 0;
-        document.getElementById('button1').addEventListener('click', function() {
-            count1++;
-            alert('Button 1 pressed ' + count1 + ' times!');
+        const button = document.getElementById('fingerButton');
+        const activeCountEl = document.getElementById('activeCount');
+        const mainScreen = document.getElementById('mainScreen');
+        const successScreen = document.getElementById('successScreen');
+        
+        let activePresses = new Set();
+        let pressTimers = {};
+        let nextPersonId = 1;
+
+        // Function to generate unique ID for each press
+        function generatePressId() {
+            return 'press_' + Date.now() + '_' + Math.random();
+        }
+
+        // Update display
+        function updateDisplay() {
+            const count = activePresses.size;
+            activeCountEl.textContent = count;
+            
+            // Update progress bars
+            let personIndex = 1;
+            for (let i = 1; i <= 5; i++) {
+                const progressBar = document.getElementById('progress' + i);
+                if (personIndex <= count) {
+                    progressBar.style.height = '100%';
+                    personIndex++;
+                } else {
+                    progressBar.style.height = '0%';
+                }
+            }
+
+            // Check if goal achieved
+            if (count >= 5) {
+                setTimeout(() => {
+                    mainScreen.style.display = 'none';
+                    successScreen.style.display = 'block';
+                    createConfetti();
+                }, 300);
+            }
+        }
+
+        // Mouse/Touch events
+        button.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            const pressId = generatePressId();
+            activePresses.add(pressId);
+            button.classList.add('pressing');
+            updateDisplay();
+
+            pressTimers[pressId] = setTimeout(() => {
+                // Keep the press active
+            }, 100);
+
+            // Store pressId on the button for this specific press
+            button.dataset.currentPressId = pressId;
         });
-        document.getElementById('button2').addEventListener('click', function() {
-            count2++;
-            alert('Button 2 pressed ' + count2 + ' times!');
+
+        button.addEventListener('mouseup', () => {
+            const pressId = button.dataset.currentPressId;
+            if (pressId) {
+                activePresses.delete(pressId);
+                if (pressTimers[pressId]) {
+                    clearTimeout(pressTimers[pressId]);
+                    delete pressTimers[pressId];
+                }
+                delete button.dataset.currentPressId;
+            }
+            
+            if (activePresses.size === 0) {
+                button.classList.remove('pressing');
+            }
+            updateDisplay();
         });
+
+        button.addEventListener('mouseleave', () => {
+            const pressId = button.dataset.currentPressId;
+            if (pressId) {
+                activePresses.delete(pressId);
+                if (pressTimers[pressId]) {
+                    clearTimeout(pressTimers[pressId]);
+                    delete pressTimers[pressId];
+                }
+                delete button.dataset.currentPressId;
+            }
+            
+            if (activePresses.size === 0) {
+                button.classList.remove('pressing');
+            }
+            updateDisplay();
+        });
+
+        // Touch support for mobile
+        button.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            // Support multiple touches
+            for (let touch of e.changedTouches) {
+                const pressId = 'touch_' + touch.identifier;
+                activePresses.add(pressId);
+                button.classList.add('pressing');
+            }
+            updateDisplay();
+        });
+
+        button.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            for (let touch of e.changedTouches) {
+                const pressId = 'touch_' + touch.identifier;
+                activePresses.delete(pressId);
+            }
+            
+            if (activePresses.size === 0) {
+                button.classList.remove('pressing');
+            }
+            updateDisplay();
+        });
+
+        button.addEventListener('touchcancel', (e) => {
+            e.preventDefault();
+            for (let touch of e.changedTouches) {
+                const pressId = 'touch_' + touch.identifier;
+                activePresses.delete(pressId);
+            }
+            
+            if (activePresses.size === 0) {
+                button.classList.remove('pressing');
+            }
+            updateDisplay();
+        });
+
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#ffd700', '#ff6b6b', '#4ade80', '#60a5fa', '#f472b6'];
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 3 + 's';
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 5000);
+                }, i * 30);
+            }
+        }
+
+        // Reset game
+        function resetGame() {
+            activePresses.clear();
+            pressTimers = {};
+            nextPersonId = 1;
+            button.classList.remove('pressing');
+            mainScreen.style.display = 'block';
+            successScreen.style.display = 'none';
+            updateDisplay();
+        }
     </script>
 </body>
 </html>
