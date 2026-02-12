@@ -12,10 +12,12 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 50%, #db2777 100%);
-            background-size: 200% 200%;
-            animation: gradientShift 15s ease infinite;
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(20, 30, 48, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(30, 20, 40, 0.3) 0%, transparent 50%),
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,.03) 3px, rgba(255,255,255,.03) 3px);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -31,15 +33,33 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.8) 100%);
             pointer-events: none;
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0,0,0,0.1) 0px,
+                    transparent 1px,
+                    transparent 2px,
+                    rgba(0,0,0,0.1) 3px
+                );
+            pointer-events: none;
+            opacity: 0.3;
+            animation: scanlines 8s linear infinite;
+        }
+
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(20px); }
         }
 
         .container {
@@ -58,81 +78,86 @@
         }
 
         h1 {
-            color: white;
-            font-size: 3.5em;
-            margin-bottom: 20px;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5),
-                         0 0 40px rgba(255, 215, 0, 0.3);
-            animation: titleGlow 3s ease-in-out infinite;
-            font-weight: bold;
-            letter-spacing: 2px;
+            color: #8b9dc3;
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(139, 157, 195, 0.5),
+                         0 0 20px rgba(139, 157, 195, 0.3),
+                         0 0 30px rgba(139, 157, 195, 0.2);
+            font-weight: 300;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            animation: flicker 5s ease-in-out infinite;
         }
 
-        @keyframes titleGlow {
+        @keyframes flicker {
             0%, 100% {
-                text-shadow: 0 0 20px rgba(255, 255, 255, 0.5),
-                             0 0 40px rgba(255, 215, 0, 0.3);
+                opacity: 1;
+                text-shadow: 0 0 10px rgba(139, 157, 195, 0.5),
+                             0 0 20px rgba(139, 157, 195, 0.3);
             }
             50% {
-                text-shadow: 0 0 30px rgba(255, 255, 255, 0.8),
-                             0 0 60px rgba(255, 215, 0, 0.6),
-                             0 0 80px rgba(255, 215, 0, 0.4);
+                opacity: 0.95;
+                text-shadow: 0 0 15px rgba(139, 157, 195, 0.6),
+                             0 0 25px rgba(139, 157, 195, 0.4);
             }
         }
 
         .instruction {
-            color: #f0f0f0;
-            font-size: 1.4em;
+            color: #6b7280;
+            font-size: 1.1em;
             margin-bottom: 40px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
-            font-weight: 500;
+            text-shadow: 0 0 5px rgba(107, 114, 128, 0.5);
+            font-weight: 300;
+            letter-spacing: 2px;
         }
 
         .counter {
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
-            padding: 40px;
+            background: rgba(20, 20, 30, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 5px;
+            padding: 30px;
             margin-bottom: 50px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3),
-                        inset 0 1px 0 rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 
+                inset 0 0 20px rgba(0,0,0,0.5),
+                0 0 1px rgba(139, 157, 195, 0.3);
+            border: 1px solid rgba(139, 157, 195, 0.2);
         }
 
         .counter-text {
-            color: white;
-            font-size: 4em;
-            font-weight: bold;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-            background: linear-gradient(135deg, #ffd700 0%, #fff 50%, #ffd700 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #8b9dc3;
+            font-size: 3.5em;
+            font-weight: 300;
+            text-shadow: 0 0 20px rgba(139, 157, 195, 0.6);
+            font-family: 'Courier New', monospace;
+            letter-spacing: 10px;
         }
 
         .counter-label {
-            color: #f0f0f0;
-            font-size: 1.3em;
+            color: #6b7280;
+            font-size: 1em;
             margin-top: 15px;
-            font-weight: 500;
+            font-weight: 300;
+            letter-spacing: 3px;
         }
 
         #fingerButton {
-            width: 300px;
-            height: 300px;
+            width: 280px;
+            height: 280px;
             border-radius: 50%;
-            border: none;
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
-            background-size: 200% 200%;
-            font-size: 10em;
+            border: 2px solid rgba(139, 157, 195, 0.3);
+            background: radial-gradient(circle at 30% 30%, rgba(30, 30, 45, 0.8), rgba(15, 15, 20, 0.9));
+            font-size: 9em;
             cursor: pointer;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4),
-                        0 0 0 10px rgba(255, 215, 0, 0.2),
-                        inset 0 -10px 30px rgba(0,0,0,0.2);
+            box-shadow: 
+                0 0 30px rgba(0,0,0,0.8),
+                inset 0 0 20px rgba(139, 157, 195, 0.1),
+                0 0 50px rgba(139, 157, 195, 0.2);
             transition: all 0.3s ease;
             position: relative;
             margin: 0 auto;
-            animation: float 3s ease-in-out infinite;
+            animation: float 4s ease-in-out infinite;
+            filter: grayscale(30%);
         }
 
         @keyframes float {
@@ -140,90 +165,89 @@
                 transform: translateY(0px);
             }
             50% {
-                transform: translateY(-10px);
+                transform: translateY(-8px);
             }
         }
 
         #fingerButton::before {
             content: '';
             position: absolute;
-            top: -5px;
-            left: -5px;
-            right: -5px;
-            bottom: -5px;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
             border-radius: 50%;
-            background: linear-gradient(135deg, transparent, rgba(255,255,255,0.3), transparent);
+            background: linear-gradient(135deg, transparent, rgba(139, 157, 195, 0.2), transparent);
             opacity: 0;
             transition: opacity 0.3s ease;
         }
 
         #fingerButton:hover {
-            transform: scale(1.05) translateY(-5px);
-            box-shadow: 0 25px 70px rgba(0,0,0,0.5),
-                        0 0 0 15px rgba(255, 215, 0, 0.3),
-                        inset 0 -10px 30px rgba(0,0,0,0.2);
+            transform: scale(1.03) translateY(-5px);
+            box-shadow: 
+                0 0 40px rgba(0,0,0,0.9),
+                inset 0 0 25px rgba(139, 157, 195, 0.15),
+                0 0 60px rgba(139, 157, 195, 0.3);
+            border-color: rgba(139, 157, 195, 0.4);
         }
 
         #fingerButton:hover::before {
             opacity: 1;
         }
 
-        #fingerButton:active {
-            transform: scale(0.98);
-        }
-
         #fingerButton.pressing {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 50%, #ffd93d 100%);
-            background-size: 200% 200%;
-            animation: buttonPulse 0.6s infinite, gradientMove 2s ease infinite;
-            box-shadow: 0 0 40px rgba(255, 107, 107, 0.6),
-                        0 20px 60px rgba(0,0,0,0.4),
-                        inset 0 -10px 30px rgba(0,0,0,0.3);
+            background: radial-gradient(circle at 30% 30%, rgba(50, 50, 70, 0.9), rgba(25, 25, 35, 0.95));
+            animation: buttonPulse 0.8s infinite;
+            box-shadow: 
+                0 0 60px rgba(139, 157, 195, 0.4),
+                inset 0 0 30px rgba(139, 157, 195, 0.2);
+            border-color: rgba(139, 157, 195, 0.6);
         }
 
         @keyframes buttonPulse {
             0%, 100% {
                 transform: scale(1);
+                box-shadow: 
+                    0 0 60px rgba(139, 157, 195, 0.4),
+                    inset 0 0 30px rgba(139, 157, 195, 0.2);
             }
             50% {
-                transform: scale(1.08);
+                transform: scale(1.04);
+                box-shadow: 
+                    0 0 80px rgba(139, 157, 195, 0.5),
+                    inset 0 0 40px rgba(139, 157, 195, 0.3);
             }
-        }
-
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
         }
 
         .progress-bars {
             margin-top: 50px;
             display: flex;
             justify-content: center;
-            gap: 40px;
+            gap: 60px;
             flex-wrap: wrap;
         }
 
         .progress-bar {
-            width: 80px;
-            height: 250px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 40px;
+            width: 70px;
+            height: 220px;
+            background: rgba(20, 20, 30, 0.4);
+            border-radius: 5px;
             position: relative;
             overflow: hidden;
-            box-shadow: inset 0 2px 20px rgba(0,0,0,0.3),
-                        0 4px 20px rgba(0,0,0,0.2);
-            border: 2px solid rgba(255,255,255,0.2);
+            box-shadow: 
+                inset 0 0 20px rgba(0,0,0,0.8),
+                0 0 1px rgba(139, 157, 195, 0.2);
+            border: 1px solid rgba(139, 157, 195, 0.15);
         }
 
         .progress-fill {
             position: absolute;
             bottom: 0;
             width: 100%;
-            background: linear-gradient(180deg, #10b981 0%, #34d399 50%, #6ee7b7 100%);
+            background: linear-gradient(180deg, rgba(139, 157, 195, 0.6) 0%, rgba(139, 157, 195, 0.8) 100%);
             transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 40px;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(139, 157, 195, 0.5);
         }
 
         .progress-fill::before {
@@ -233,146 +257,164 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(180deg, rgba(255,255,255,0.3) 0%, transparent 100%);
-            border-radius: 40px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+            border-radius: 5px;
         }
 
         .person-number {
             position: absolute;
-            top: 15px;
+            top: 12px;
             left: 50%;
             transform: translateX(-50%);
-            color: white;
-            font-weight: bold;
-            font-size: 1.5em;
+            color: #8b9dc3;
+            font-weight: 300;
+            font-size: 1.3em;
             z-index: 1;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            text-shadow: 0 0 10px rgba(139, 157, 195, 0.5);
+            font-family: 'Courier New', monospace;
         }
 
-        .success-message {
-            color: white;
-            font-size: 4em;
-            font-weight: bold;
-            text-shadow: 0 0 30px rgba(255, 255, 255, 0.8),
-                         0 0 60px rgba(255, 215, 0, 0.6);
-            animation: celebration 1.5s ease-in-out infinite;
-            letter-spacing: 3px;
-            line-height: 1.4;
+        .note-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(15, 15, 20, 0.95);
+            border: 1px solid rgba(139, 157, 195, 0.3);
+            box-shadow: 
+                0 0 40px rgba(0,0,0,0.9),
+                inset 0 0 30px rgba(0,0,0,0.5),
+                0 0 60px rgba(139, 157, 195, 0.2);
+            padding: 50px 40px;
+            border-radius: 5px;
+            animation: noteAppear 1.5s ease-out;
         }
 
-        @keyframes celebration {
-            0%, 100% {
-                transform: scale(1) rotate(0deg);
+        @keyframes noteAppear {
+            0% {
+                opacity: 0;
+                transform: scale(0.95);
             }
-            25% {
-                transform: scale(1.1) rotate(-3deg);
+            100% {
+                opacity: 1;
+                transform: scale(1);
             }
-            75% {
-                transform: scale(1.1) rotate(3deg);
-            }
+        }
+
+        .note-text {
+            color: #8b9dc3;
+            font-size: 1.15em;
+            line-height: 2;
+            text-align: right;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 5px rgba(139, 157, 195, 0.3);
+            white-space: pre-line;
+            letter-spacing: 0.5px;
         }
 
         .confetti {
-            position: fixed;
-            width: 15px;
-            height: 15px;
-            background: #ffd700;
-            position: absolute;
-            animation: confetti-fall 4s linear infinite;
-            border-radius: 50%;
-        }
-
-        @keyframes confetti-fall {
-            to {
-                transform: translateY(100vh) rotate(720deg);
-                opacity: 0;
-            }
+            display: none;
         }
 
         .reset-button {
             margin-top: 50px;
-            padding: 20px 60px;
-            font-size: 1.4em;
-            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
-            color: #7c3aed;
-            border: none;
-            border-radius: 50px;
+            padding: 15px 50px;
+            font-size: 1em;
+            background: rgba(30, 30, 45, 0.8);
+            color: #8b9dc3;
+            border: 1px solid rgba(139, 157, 195, 0.3);
+            border-radius: 3px;
             cursor: pointer;
-            font-weight: bold;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            font-weight: 300;
+            box-shadow: 
+                0 0 20px rgba(0,0,0,0.5),
+                inset 0 0 10px rgba(0,0,0,0.3);
             transition: all 0.3s ease;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            font-family: 'Courier New', monospace;
         }
 
         .reset-button:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-            background: linear-gradient(135deg, #ffffff 0%, #ffd700 100%);
+            background: rgba(40, 40, 55, 0.9);
+            box-shadow: 
+                0 0 30px rgba(139, 157, 195, 0.3),
+                inset 0 0 15px rgba(0,0,0,0.4);
+            border-color: rgba(139, 157, 195, 0.5);
         }
 
         .reset-button:active {
-            transform: translateY(-2px) scale(1.02);
+            transform: scale(0.98);
         }
 
         .status-indicator {
             position: fixed;
             top: 20px;
             left: 20px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(20, 20, 30, 0.8);
             backdrop-filter: blur(10px);
             padding: 10px 20px;
-            border-radius: 20px;
-            color: white;
-            font-size: 0.9em;
+            border-radius: 3px;
+            color: #8b9dc3;
+            font-size: 0.85em;
             display: flex;
             align-items: center;
             gap: 10px;
+            border: 1px solid rgba(139, 157, 195, 0.2);
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
         }
 
         .status-dot {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            background: #4ade80;
+            background: #8b9dc3;
+            box-shadow: 0 0 10px rgba(139, 157, 195, 0.8);
             animation: pulse-dot 2s ease-in-out infinite;
         }
 
         @keyframes pulse-dot {
             0%, 100% {
                 opacity: 1;
+                box-shadow: 0 0 10px rgba(139, 157, 195, 0.8);
             }
             50% {
-                opacity: 0.5;
+                opacity: 0.6;
+                box-shadow: 0 0 5px rgba(139, 157, 195, 0.5);
             }
         }
 
         @media (max-width: 768px) {
             h1 {
-                font-size: 2.5em;
+                font-size: 2em;
+                letter-spacing: 4px;
             }
             
             .counter-text {
-                font-size: 3em;
+                font-size: 2.5em;
             }
             
             #fingerButton {
-                width: 250px;
-                height: 250px;
-                font-size: 8em;
+                width: 220px;
+                height: 220px;
+                font-size: 7em;
             }
             
             .progress-bar {
-                width: 60px;
-                height: 200px;
+                width: 50px;
+                height: 180px;
             }
             
-            .success-message {
-                font-size: 2.5em;
+            .note-container {
+                padding: 30px 25px;
+            }
+
+            .note-text {
+                font-size: 1em;
+                line-height: 1.8;
             }
 
             .instruction {
-                font-size: 1.2em;
+                font-size: 0.95em;
             }
         }
     </style>
@@ -385,8 +427,8 @@
 
     <div class="container">
         <div class="main-screen" id="mainScreen">
-            <h1>🔮 פורטל הקמע 🔮</h1>
-            <p class="instruction">לחצו יחד על הכפתור (לחיצה ארוכה) - 2 אנשים חייבים ללחוץ בו זמנית!</p>
+            <h1>⬡ הפורטל ⬡</h1>
+            <p class="instruction">שני אנשים חייבים ללחוץ יחד. ארוך. עכשיו.</p>
             
             <div class="counter">
                 <div class="counter-text"><span id="activeCount">0</span> / 2</div>
@@ -408,9 +450,10 @@
         </div>
 
         <div class="success-screen" id="successScreen">
-            <div class="success-message" id="successMsg">
+            <div class="note-container">
+                <div class="note-text" id="noteText"></div>
             </div>
-            <button class="reset-button" onclick="resetGame()">התחל מחדש</button>
+            <button class="reset-button" onclick="resetGame()">סגור</button>
         </div>
     </div>
 
@@ -439,11 +482,11 @@
         const activeCountEl = document.getElementById('activeCount');
         const mainScreen = document.getElementById('mainScreen');
         const successScreen = document.getElementById('successScreen');
-        const successMsg = document.getElementById('successMsg');
+        const noteText = document.getElementById('noteText');
         const statusText = document.getElementById('statusText');
         
         // Encoded message
-        const e = [57,57,57,53,53,53,115,104,115,104,115,104];
+        const e = [1488,1501,32,1488,1514,1501,32,1511,1493,1512,1488,1497,1501,32,1488,1514,32,1494,1492,44,32,1488,1494,32,1499,1504,1512,1488,1492,32,1513,1492,1508,1493,1512,1496,1500,32,1508,1514,1493,1495,46,32,1500,1488,32,1489,1496,1493,1495,32,1488,1501,32,1500,1490,1502,1512,1497,44,32,1500,1488,32,1489,1496,1493,1495,32,1488,1501,32,1494,1492,32,1499,1489,1512,32,1502,1488,1493,1495,1512,32,1502,1491,1497,46,10,1500,1488,32,1514,1499,1504,1504,1493,32,1513,1494,1492,32,1497,1511,1512,1492,32,1499,1499,1492,46,32,1494,1492,32,1500,1488,32,1492,1497,1492,32,1488,1502,1493,1512,32,1500,1492,1497,1493,1514,32,1502,1492,1512,44,32,1493,1492,1511,1502,1506,32,1500,1488,32,1492,1497,1492,32,1488,1502,1493,1512,32,1500,1492,1490,1497,1506,32,1500,1508,1504,1497,32,1513,1492,1493,1488,32,1502,1493,1499,1503,46,10,1488,1504,1495,1504,1493,32,1510,1512,1497,1499,1497,1501,32,1488,1514,32,1492,1513,1491,1512,1503,46,32,1488,1504,1497,32,1497,1493,1491,1506,32,1513,1494,1492,32,1504,1513,1502,1506,32,1502,1493,1494,1512,44,32,1488,1489,1500,32,1488,1497,1503,32,1500,1497,32,1491,1512,1498,32,1488,1495,1512,1514,32,1500,1492,1505,1489,1497,1512,32,1488,1514,32,1494,1492,46,32,1500,1488,32,1488,1514,32,1492,1511,1493,1500,32,1513,1500,1493,44,32,1500,1488,32,1488,1514,32,1492,1513,1501,44,32,1488,1493,1514,1493,46,10,1492,1493,1488,32,1492,1497,1495,1497,1491,32,1513,1492,1513,1506,1493,1503,32,1502,1511,1513,1497,1489,32,1500,1493,46,32,1488,1493,1500,1497,32,1499,1497,32,1492,1493,1488,32,1492,1511,1513,1497,1489,32,1500,1493,32,1511,1493,1491,1501,46,10,1488,1501,32,1492,1493,1488,32,1488,1493,1502,1512,32,1500,1506,1510,1493,1512,44,32,1514,1506,1510,1512,1493,44,32,1490,1501,32,1488,1501,32,1494,1492,32,1504,1512,1488,1492,32,1513,1492,1499,1493,1500,32,1506,1493,1489,1491,46,32,1493,1488,1501,32,1492,1493,1488,32,1488,1493,1502,1512,32,1500,1492,1502,1513,1497,1498,8230,32,1514,1505,1502,1499,1493,32,1506,1500,1497,1493,46,32,1490,1501,32,1488,1501,32,1492,1500,1489,32,1488,1493,1502,1512,32,1502,1513,1492,1493,32,1488,1495,1512,46,10,1497,1499,1493,1500,32,1500,1492,1497,1493,1514,32,1513,1514,1512,1488,1493,32,1491,1489,1512,1497,1501,32,1513,1500,1488,32,1492,1497,1493,32,1513,1501,32,1511,1493,1491,1501,46,32,1497,1499,1493,1500,32,1500,1492,1497,1493,1514,32,1513,1514,1513,1502,1506,1493,32,1488,1493,1514,1493,32,1502,1491,1489,1512,32,1488,1495,1512,1514,46,32,1494,1492,32,1506,1491,1497,1497,1503,32,1492,1493,1488,46,10,1488,1501,32,1502,1497,1513,1492,1493,32,1488,1495,1512,32,1497,1504,1505,1492,32,1500,1492,1495,1500,1497,1507,32,1488,1493,1514,1493,44,32,1488,1500,32,1514,1514,1504,1493,32,1500,1494,1492,32,1500,1511,1512,1493,1514,46,32,1488,1504,1497,32,1500,1488,32,1497,1493,1491,1506,32,1502,1492,32,1511,1493,1512,1492,32,1488,1494,44,32,1493,1488,1504,1497,32,1500,1488,32,1512,1493,1510,1492,32,1500,1491,1506,1514,46,10,1488,1501,32,1497,1513,32,1506,1493,1491,32,1494,1502,1503,44,32,1514,1505,1490,1512,1493,32,1488,1514,32,1492,1508,1493,1512,1496,1500,46,32,1488,1501,32,1488,1497,1503,8230,32,1514,1513,1502,1512,1493,32,1506,1500,1497,1493,46];
         
         const myUserId = 'user_' + Math.random().toString(36).substr(2, 9);
         const pressesRef = ref(database, 'presses');
@@ -489,11 +532,10 @@
             // Check if goal achieved
             if (count >= 2 && mainScreen.style.display !== 'none') {
                 setTimeout(() => {
-                    // Decode and show message
-                    successMsg.textContent = String.fromCharCode(...e);
+                    // Decode and show note
+                    noteText.textContent = String.fromCharCode(...e);
                     mainScreen.style.display = 'none';
                     successScreen.style.display = 'block';
-                    createConfetti();
                 }, 300);
             }
         }
@@ -551,26 +593,6 @@
                 remove(myPressRef);
             }
         });
-
-        // Create confetti effect
-        function createConfetti() {
-            const colors = ['#ffd700', '#ff6b6b', '#4ade80', '#60a5fa', '#f472b6', '#a78bfa', '#fbbf24'];
-            for (let i = 0; i < 150; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
-                    confetti.style.left = Math.random() * 100 + '%';
-                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.animationDelay = Math.random() * 2 + 's';
-                    confetti.style.animationDuration = (Math.random() * 2 + 3) + 's';
-                    confetti.style.width = (Math.random() * 10 + 10) + 'px';
-                    confetti.style.height = (Math.random() * 10 + 10) + 'px';
-                    document.body.appendChild(confetti);
-                    
-                    setTimeout(() => confetti.remove(), 6000);
-                }, i * 20);
-            }
-        }
 
         // Reset game
         window.resetGame = function() {
