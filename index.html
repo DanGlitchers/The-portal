@@ -223,8 +223,11 @@
             margin-top: 50px;
             display: flex;
             justify-content: center;
-            gap: 60px;
+            gap: 25px;
             flex-wrap: wrap;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .progress-bar {
@@ -428,10 +431,10 @@
     <div class="container">
         <div class="main-screen" id="mainScreen">
             <h1>⬡ הפורטל ⬡</h1>
-            <p class="instruction">שני אנשים חייבים ללחוץ יחד. ארוך. עכשיו.</p>
+            <p class="instruction">עשרה אנשים חייבים ללחוץ יחד. ארוך. עכשיו.</p>
             
             <div class="counter">
-                <div class="counter-text"><span id="activeCount">0</span> / 2</div>
+                <div class="counter-text"><span id="activeCount">0</span> / 10</div>
                 <div class="counter-label">אנשים לוחצים כרגע</div>
             </div>
 
@@ -445,6 +448,38 @@
                 <div class="progress-bar">
                     <div class="person-number">2</div>
                     <div class="progress-fill" id="progress2"></div>
+                </div>
+                <div class="progress-bar">
+                    <div class="person-number">3</div>
+                    <div class="progress-fill" id="progress3"></div>
+                </div>
+                <div class="progress-bar">
+                    <div class="person-number">4</div>
+                    <div class="progress-fill" id="progress4"></div>
+                </div>
+                <div class="progress-bar">
+                    <div class="person-number">5</div>
+                    <div class="progress-fill" id="progress5"></div>
+                </div>
+                <div class="progress-bar">
+                    <div class="person-number">6</div>
+                    <div class="progress-fill" id="progress6"></div>
+                </div>
+                <div class="progress-bar">
+                    <div class="person-number">7</div>
+                    <div class="progress-fill" id="progress7"></div>
+                </div>
+                <div class="progress-bar">
+                    <div class="person-number">8</div>
+                    <div class="progress-fill" id="progress8"></div>
+                </div>
+                <div class="progress-bar">
+                    <div class="person-number">9</div>
+                    <div class="progress-fill" id="progress9"></div>
+                </div>
+                <div class="progress-bar">
+                    <div class="person-number">10</div>
+                    <div class="progress-fill" id="progress10"></div>
                 </div>
             </div>
         </div>
@@ -512,7 +547,7 @@
             
             // Update progress bars
             let personIndex = 1;
-            for (let i = 1; i <= 2; i++) {
+            for (let i = 1; i <= 10; i++) {
                 const progressBar = document.getElementById('progress' + i);
                 if (personIndex <= count) {
                     progressBar.style.height = '100%';
@@ -530,7 +565,7 @@
             }
 
             // Check if goal achieved
-            if (count >= 2 && mainScreen.style.display !== 'none') {
+            if (count >= 10 && mainScreen.style.display !== 'none') {
                 setTimeout(() => {
                     // Decode and show note
                     noteText.textContent = String.fromCharCode(...e);
