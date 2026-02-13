@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="he">
+<html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>פורטל הקמע - מסונכרן</title>
+    <title>פרופיל משתמש</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,639 +15,648 @@
         }
 
         body {
-            font-family: 'Courier New', monospace;
+            font-family: 'Heebo', sans-serif;
             background: #0a0a0a;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(20, 30, 48, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 90% 80%, rgba(30, 20, 40, 0.3) 0%, transparent 50%),
-                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,.03) 3px, rgba(255,255,255,.03) 3px);
+            color: #e0e0e0;
             min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Stage 1 - User Profile (TikTok-style) */
+        .stage-1 {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: #121212;
+            animation: fadeIn 2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .profile-header {
+            padding: 20px;
+            border-bottom: 1px solid #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .back-arrow {
+            font-size: 1.5rem;
+            color: #666;
+        }
+
+        .profile-menu {
+            font-size: 1.5rem;
+            color: #666;
+        }
+
+        .profile-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #1a1a1a, #0a0a0a);
+            border: 2px solid #222;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: #333;
+        }
+
+        .username {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #e0e0e0;
+            margin-bottom: 8px;
+        }
+
+        .user-handle {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 25px;
+            padding: 20px 0;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-number {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #e0e0e0;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .follow-button {
+            padding: 12px 60px;
+            background: #1a1a1a;
+            border: 1px solid #282828;
+            color: #808080;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .follow-button:hover {
+            background: #222;
+            border-color: #333;
+        }
+
+        .bio {
+            max-width: 400px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .cryptic-message {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #707070;
+            letter-spacing: 0.5px;
+        }
+
+        .videos-section {
+            width: 100%;
+            padding: 30px 20px;
+            border-top: 1px solid #1a1a1a;
+        }
+
+        .videos-header {
             display: flex;
             justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            position: relative;
+            gap: 50px;
+            margin-bottom: 20px;
         }
 
-        body::before {
+        .tab {
+            font-size: 0.9rem;
+            color: #666;
+            padding-bottom: 12px;
+            cursor: pointer;
+        }
+
+        .tab.active {
+            color: #e0e0e0;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .video-placeholder {
+            aspect-ratio: 9/16;
+            background: #0d0d0d;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-placeholder::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.8) 100%);
-            pointer-events: none;
-        }
-
-        body::after {
-            content: '';
-            position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
             background: 
-                repeating-linear-gradient(
-                    0deg,
-                    rgba(0,0,0,0.1) 0px,
-                    transparent 1px,
-                    transparent 2px,
-                    rgba(0,0,0,0.1) 3px
-                );
-            pointer-events: none;
-            opacity: 0.3;
-            animation: scanlines 8s linear infinite;
+                radial-gradient(circle at 30% 40%, rgba(20, 20, 20, 0.5) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(15, 15, 15, 0.5) 0%, transparent 50%);
         }
 
-        @keyframes scanlines {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(20px); }
+        .breach-button {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 14px 40px;
+            background: rgba(10, 10, 10, 0.95);
+            border: 1px solid #2a2a2a;
+            color: #707070;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+            backdrop-filter: blur(10px);
+            z-index: 100;
         }
 
-        .container {
-            text-align: center;
-            padding: 20px;
-            position: relative;
-            z-index: 1;
+        .breach-button:hover {
+            border-color: #404040;
+            color: #909090;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
         }
 
-        .main-screen {
-            display: block;
-        }
-
-        .success-screen {
+        /* Stage 2 & 3 - Breach System */
+        .stage-2 {
             display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px;
+            background: #000;
         }
 
-        h1 {
-            color: #8b9dc3;
-            font-size: 2.8em;
-            margin-bottom: 15px;
-            text-shadow: 0 0 10px rgba(139, 157, 195, 0.5),
-                         0 0 20px rgba(139, 157, 195, 0.3),
-                         0 0 30px rgba(139, 157, 195, 0.2);
-            font-weight: 300;
-            letter-spacing: 8px;
+        .system-header {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.9rem;
+            color: #444;
+            margin-bottom: 80px;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            animation: flicker 5s ease-in-out infinite;
+            animation: glitch 0.5s ease-in;
         }
 
-        @keyframes flicker {
-            0%, 100% {
-                opacity: 1;
-                text-shadow: 0 0 10px rgba(139, 157, 195, 0.5),
-                             0 0 20px rgba(139, 157, 195, 0.3);
-            }
-            50% {
-                opacity: 0.95;
-                text-shadow: 0 0 15px rgba(139, 157, 195, 0.6),
-                             0 0 25px rgba(139, 157, 195, 0.4);
-            }
+        @keyframes glitch {
+            0%, 100% { opacity: 1; transform: translateX(0); }
+            25% { opacity: 0.8; transform: translateX(-2px); }
+            50% { opacity: 1; transform: translateX(2px); }
+            75% { opacity: 0.9; transform: translateX(-1px); }
         }
 
-        .instruction {
-            color: #6b7280;
-            font-size: 1.1em;
-            margin-bottom: 40px;
-            text-shadow: 0 0 5px rgba(107, 114, 128, 0.5);
-            font-weight: 300;
+        .timing-game {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .streak-counter {
+            text-align: center;
+            margin-bottom: 60px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1rem;
+            color: #555;
             letter-spacing: 2px;
         }
 
-        .counter {
-            background: rgba(20, 20, 30, 0.6);
-            backdrop-filter: blur(10px);
-            border-radius: 5px;
-            padding: 30px;
-            margin-bottom: 50px;
-            box-shadow: 
-                inset 0 0 20px rgba(0,0,0,0.5),
-                0 0 1px rgba(139, 157, 195, 0.3);
-            border: 1px solid rgba(139, 157, 195, 0.2);
-        }
-
-        .counter-text {
-            color: #8b9dc3;
-            font-size: 3.5em;
-            font-weight: 300;
-            text-shadow: 0 0 20px rgba(139, 157, 195, 0.6);
-            font-family: 'Courier New', monospace;
-            letter-spacing: 10px;
-        }
-
-        .counter-label {
-            color: #6b7280;
-            font-size: 1em;
-            margin-top: 15px;
-            font-weight: 300;
-            letter-spacing: 3px;
-        }
-
-        #fingerButton {
-            width: 280px;
-            height: 280px;
-            border-radius: 50%;
-            border: 2px solid rgba(139, 157, 195, 0.3);
-            background: radial-gradient(circle at 30% 30%, rgba(30, 30, 45, 0.8), rgba(15, 15, 20, 0.9));
-            font-size: 9em;
-            cursor: pointer;
-            box-shadow: 
-                0 0 30px rgba(0,0,0,0.8),
-                inset 0 0 20px rgba(139, 157, 195, 0.1),
-                0 0 50px rgba(139, 157, 195, 0.2);
-            transition: all 0.3s ease;
+        .meter-container {
             position: relative;
-            margin: 0 auto;
-            animation: float 4s ease-in-out infinite;
-            filter: grayscale(30%);
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-8px);
-            }
-        }
-
-        #fingerButton::before {
-            content: '';
-            position: absolute;
-            top: -3px;
-            left: -3px;
-            right: -3px;
-            bottom: -3px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, transparent, rgba(139, 157, 195, 0.2), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        #fingerButton:hover {
-            transform: scale(1.03) translateY(-5px);
-            box-shadow: 
-                0 0 40px rgba(0,0,0,0.9),
-                inset 0 0 25px rgba(139, 157, 195, 0.15),
-                0 0 60px rgba(139, 157, 195, 0.3);
-            border-color: rgba(139, 157, 195, 0.4);
-        }
-
-        #fingerButton:hover::before {
-            opacity: 1;
-        }
-
-        #fingerButton.pressing {
-            background: radial-gradient(circle at 30% 30%, rgba(50, 50, 70, 0.9), rgba(25, 25, 35, 0.95));
-            animation: buttonPulse 0.8s infinite;
-            box-shadow: 
-                0 0 60px rgba(139, 157, 195, 0.4),
-                inset 0 0 30px rgba(139, 157, 195, 0.2);
-            border-color: rgba(139, 157, 195, 0.6);
-        }
-
-        @keyframes buttonPulse {
-            0%, 100% {
-                transform: scale(1);
-                box-shadow: 
-                    0 0 60px rgba(139, 157, 195, 0.4),
-                    inset 0 0 30px rgba(139, 157, 195, 0.2);
-            }
-            50% {
-                transform: scale(1.04);
-                box-shadow: 
-                    0 0 80px rgba(139, 157, 195, 0.5),
-                    inset 0 0 40px rgba(139, 157, 195, 0.3);
-            }
-        }
-
-        .progress-bars {
-            margin-top: 50px;
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            flex-wrap: wrap;
-            max-width: 900px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .progress-bar {
-            width: 70px;
-            height: 220px;
-            background: rgba(20, 20, 30, 0.4);
-            border-radius: 5px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 
-                inset 0 0 20px rgba(0,0,0,0.8),
-                0 0 1px rgba(139, 157, 195, 0.2);
-            border: 1px solid rgba(139, 157, 195, 0.15);
-        }
-
-        .progress-fill {
-            position: absolute;
-            bottom: 0;
             width: 100%;
-            background: linear-gradient(180deg, rgba(139, 157, 195, 0.6) 0%, rgba(139, 157, 195, 0.8) 100%);
-            transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 5px;
-            box-shadow: 0 0 15px rgba(139, 157, 195, 0.5);
+            height: 60px;
+            background: #0d0d0d;
+            border: 1px solid #1a1a1a;
+            margin-bottom: 40px;
+            overflow: hidden;
         }
 
-        .progress-fill::before {
-            content: '';
+        .meter-bar {
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 100%);
-            border-radius: 5px;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                transparent calc(50% - var(--zone-size, 60px)), 
+                rgba(0, 255, 100, 0.15) calc(50% - var(--zone-size, 60px)), 
+                rgba(0, 255, 100, 0.3) 50%, 
+                rgba(0, 255, 100, 0.15) calc(50% + var(--zone-size, 60px)), 
+                transparent calc(50% + var(--zone-size, 60px)),
+                transparent 100%
+            );
         }
 
-        .person-number {
+        .meter-line {
             position: absolute;
-            top: 12px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #8b9dc3;
-            font-weight: 300;
-            font-size: 1.3em;
-            z-index: 1;
-            text-shadow: 0 0 10px rgba(139, 157, 195, 0.5);
-            font-family: 'Courier New', monospace;
+            top: 0;
+            left: 0;
+            width: 2px;
+            height: 100%;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            animation: sweep linear infinite;
         }
 
-        .note-container {
-            max-width: 700px;
-            margin: 0 auto;
-            background: rgba(15, 15, 20, 0.95);
-            border: 1px solid rgba(139, 157, 195, 0.3);
-            box-shadow: 
-                0 0 40px rgba(0,0,0,0.9),
-                inset 0 0 30px rgba(0,0,0,0.5),
-                0 0 60px rgba(139, 157, 195, 0.2);
-            padding: 50px 40px;
-            border-radius: 5px;
-            animation: noteAppear 1.5s ease-out;
+        @keyframes sweep {
+            0% { left: 0; }
+            50% { left: calc(100% - 2px); }
+            100% { left: 0; }
         }
 
-        @keyframes noteAppear {
-            0% {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
+        .click-area {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+            z-index: 10;
         }
 
-        .note-text {
-            color: #8b9dc3;
-            font-size: 1.15em;
-            line-height: 2;
-            text-align: right;
-            font-family: 'Courier New', monospace;
-            text-shadow: 0 0 5px rgba(139, 157, 195, 0.3);
-            white-space: pre-line;
-            letter-spacing: 0.5px;
-        }
-
-        .confetti {
-            display: none;
-        }
-
-        .reset-button {
-            margin-top: 50px;
-            padding: 15px 50px;
-            font-size: 1em;
-            background: rgba(30, 30, 45, 0.8);
-            color: #8b9dc3;
-            border: 1px solid rgba(139, 157, 195, 0.3);
-            border-radius: 3px;
-            cursor: pointer;
-            font-weight: 300;
-            box-shadow: 
-                0 0 20px rgba(0,0,0,0.5),
-                inset 0 0 10px rgba(0,0,0,0.3);
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            font-family: 'Courier New', monospace;
-        }
-
-        .reset-button:hover {
-            background: rgba(40, 40, 55, 0.9);
-            box-shadow: 
-                0 0 30px rgba(139, 157, 195, 0.3),
-                inset 0 0 15px rgba(0,0,0,0.4);
-            border-color: rgba(139, 157, 195, 0.5);
-        }
-
-        .reset-button:active {
-            transform: scale(0.98);
-        }
-
-        .status-indicator {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: rgba(20, 20, 30, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 10px 20px;
-            border-radius: 3px;
-            color: #8b9dc3;
-            font-size: 0.85em;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border: 1px solid rgba(139, 157, 195, 0.2);
-            font-family: 'Courier New', monospace;
+        .instruction {
+            text-align: center;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
+            color: #333;
             letter-spacing: 1px;
         }
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #8b9dc3;
-            box-shadow: 0 0 10px rgba(139, 157, 195, 0.8);
-            animation: pulse-dot 2s ease-in-out infinite;
+        /* Stage 4 - Success */
+        .stage-4 {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px;
+            background: #000;
+            animation: fadeIn 1s ease-in;
         }
 
-        @keyframes pulse-dot {
-            0%, 100% {
+        .access-granted {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .access-text {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1.1rem;
+            color: #00ff64;
+            letter-spacing: 3px;
+            margin-bottom: 80px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .final-button {
+            padding: 16px 40px;
+            background: transparent;
+            border: 1px solid #00ff64;
+            color: #00ff64;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .final-button:hover {
+            background: rgba(0, 255, 100, 0.1);
+            box-shadow: 0 0 30px rgba(0, 255, 100, 0.3);
+        }
+
+        /* Stage 5 - The Twist */
+        .stage-5 {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 60px;
+            background: #000;
+        }
+
+        .revelation {
+            max-width: 700px;
+            font-family: 'IBM Plex Mono', monospace;
+            line-height: 2;
+            color: #999;
+        }
+
+        .revelation p {
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: revealText 0.8s ease-in forwards;
+            font-size: 1rem;
+        }
+
+        .revelation p:nth-child(1) {
+            animation-delay: 0.5s;
+        }
+
+        .revelation p:nth-child(2) {
+            animation-delay: 2.5s;
+            color: #bbb;
+        }
+
+        .revelation p:nth-child(3) {
+            animation-delay: 4s;
+            color: #ddd;
+        }
+
+        .revelation p:nth-child(4) {
+            animation-delay: 5.5s;
+            color: #ff6b6b;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        .revelation p:nth-child(5) {
+            animation-delay: 7.5s;
+            color: #ff4444;
+            font-weight: 500;
+            font-size: 1.15rem;
+        }
+
+        .revelation p:nth-child(6) {
+            animation-delay: 10s;
+            color: #ff0000;
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        @keyframes revealText {
+            from { 
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to { 
                 opacity: 1;
-                box-shadow: 0 0 10px rgba(139, 157, 195, 0.8);
-            }
-            50% {
-                opacity: 0.6;
-                box-shadow: 0 0 5px rgba(139, 157, 195, 0.5);
+                transform: translateY(0);
             }
         }
 
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2em;
-                letter-spacing: 4px;
-            }
-            
-            .counter-text {
-                font-size: 2.5em;
-            }
-            
-            #fingerButton {
-                width: 220px;
-                height: 220px;
-                font-size: 7em;
-            }
-            
-            .progress-bar {
-                width: 50px;
-                height: 180px;
-            }
-            
-            .note-container {
-                padding: 30px 25px;
-            }
+        .hidden {
+            display: none !important;
+        }
 
-            .note-text {
-                font-size: 1em;
-                line-height: 1.8;
-            }
+        /* Feedback effects */
+        @keyframes flashSuccess {
+            0%, 100% { background: #0d0d0d; }
+            50% { background: rgba(0, 255, 100, 0.1); }
+        }
 
-            .instruction {
-                font-size: 0.95em;
-            }
+        @keyframes flashFail {
+            0%, 100% { background: #0d0d0d; }
+            50% { background: rgba(255, 0, 0, 0.1); }
+        }
+
+        .flash-success {
+            animation: flashSuccess 0.3s ease-out;
+        }
+
+        .flash-fail {
+            animation: flashFail 0.3s ease-out;
         }
     </style>
 </head>
 <body>
-    <div class="status-indicator">
-        <div class="status-dot"></div>
-        <span id="statusText">מתחבר...</span>
-    </div>
-
-    <div class="container">
-        <div class="main-screen" id="mainScreen">
-            <h1>⬡ הפורטל ⬡</h1>
-            <p class="instruction">עשרה אנשים חייבים ללחוץ יחד. ארוך. עכשיו.</p>
+    <!-- Stage 1: User Profile (TikTok-style) -->
+    <div class="stage-1" id="stage1">
+        <div class="profile-header">
+            <div class="back-arrow">←</div>
+            <div class="profile-menu">⋮</div>
+        </div>
+        
+        <div class="profile-content">
+            <div class="profile-avatar">👁</div>
+            <div class="username">האדון</div>
+            <div class="user-handle">@the.master</div>
             
-            <div class="counter">
-                <div class="counter-text"><span id="activeCount">0</span> / 10</div>
-                <div class="counter-label">אנשים לוחצים כרגע</div>
+            <div class="profile-stats">
+                <div class="stat">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">עוקבים</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">עוקב</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">1</div>
+                    <div class="stat-label">לייקים</div>
+                </div>
             </div>
-
-            <button id="fingerButton">👆</button>
-
-            <div class="progress-bars">
-                <div class="progress-bar">
-                    <div class="person-number">1</div>
-                    <div class="progress-fill" id="progress1"></div>
-                </div>
-                <div class="progress-bar">
-                    <div class="person-number">2</div>
-                    <div class="progress-fill" id="progress2"></div>
-                </div>
-                <div class="progress-bar">
-                    <div class="person-number">3</div>
-                    <div class="progress-fill" id="progress3"></div>
-                </div>
-                <div class="progress-bar">
-                    <div class="person-number">4</div>
-                    <div class="progress-fill" id="progress4"></div>
-                </div>
-                <div class="progress-bar">
-                    <div class="person-number">5</div>
-                    <div class="progress-fill" id="progress5"></div>
-                </div>
-                <div class="progress-bar">
-                    <div class="person-number">6</div>
-                    <div class="progress-fill" id="progress6"></div>
-                </div>
-                <div class="progress-bar">
-                    <div class="person-number">7</div>
-                    <div class="progress-fill" id="progress7"></div>
-                </div>
-                <div class="progress-bar">
-                    <div class="person-number">8</div>
-                    <div class="progress-fill" id="progress8"></div>
-                </div>
-                <div class="progress-bar">
-                    <div class="person-number">9</div>
-                    <div class="progress-fill" id="progress9"></div>
-                </div>
-                <div class="progress-bar">
-                    <div class="person-number">10</div>
-                    <div class="progress-fill" id="progress10"></div>
-                </div>
+            
+            <button class="follow-button">עקוב</button>
+            
+            <div class="bio">
+                <p class="cryptic-message">הזמן כבר לא סופר אתכם.<br>אתם סופרים אותו.</p>
             </div>
         </div>
-
-        <div class="success-screen" id="successScreen">
-            <div class="note-container">
-                <div class="note-text" id="noteText"></div>
+        
+        <div class="videos-section">
+            <div class="videos-header">
+                <div class="tab active">סרטונים</div>
+                <div class="tab">אהבתי</div>
             </div>
-            <button class="reset-button" onclick="resetGame()">סגור</button>
+            <div class="videos-grid">
+                <div class="video-placeholder"></div>
+                <div class="video-placeholder"></div>
+                <div class="video-placeholder"></div>
+                <div class="video-placeholder"></div>
+                <div class="video-placeholder"></div>
+                <div class="video-placeholder"></div>
+            </div>
+        </div>
+        
+        <button class="breach-button" id="breachBtn">לפרוץ לעמוד</button>
+    </div>
+
+    <!-- Stage 2 & 3: Breach System / Timing Game -->
+    <div class="stage-2" id="stage2">
+        <div class="system-header">ייצוב גישה</div>
+        <div class="timing-game">
+            <div class="streak-counter" id="streakCounter">רצף: 0 / 10</div>
+            <div class="meter-container" id="meterContainer">
+                <div class="meter-bar" id="meterBar"></div>
+                <div class="meter-line" id="meterLine"></div>
+                <div class="click-area" id="clickArea"></div>
+            </div>
+            <div class="instruction">לחץ בזמן המדויק</div>
         </div>
     </div>
 
-    <!-- Firebase SDK -->
-    <script type="module">
-        // Import Firebase modules
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getDatabase, ref, set, onValue, remove, onDisconnect } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+    <!-- Stage 4: Access Granted -->
+    <div class="stage-4" id="stage4">
+        <div class="access-granted">
+            <div class="access-text">גישה נפתחה</div>
+            <button class="final-button" id="stopPortalBtn">לעצור את הפורטל</button>
+        </div>
+    </div>
 
-        // Firebase configuration - החלף עם הנתונים שלך מ-Firebase Console
-        const firebaseConfig = {
-            apiKey: "AIzaSyDT01Ij2DrfNYSMNubUze86pP9J4pHLD6U",
-            authDomain: "portal-game-eb63f.firebaseapp.com",
-            databaseURL: "https://portal-game-eb63f-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "portal-game-eb63f",
-            storageBucket: "portal-game-eb63f.firebasestorage.app",
-            messagingSenderId: "459065415227",
-            appId: "1:459065415227:web:e44499207338baa6baee1e"
-        };
+    <!-- Stage 5: The Twist -->
+    <div class="stage-5" id="stage5"></div>
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
+    <script>
+        // Game state
+        let streak = 0;
+        let isAnimating = false;
+        const maxStreak = 10;
+        const baseZoneSize = 60;
+        const minZoneSize = 15;
+        const baseDuration = 3;
 
-        const button = document.getElementById('fingerButton');
-        const activeCountEl = document.getElementById('activeCount');
-        const mainScreen = document.getElementById('mainScreen');
-        const successScreen = document.getElementById('successScreen');
-        const noteText = document.getElementById('noteText');
-        const statusText = document.getElementById('statusText');
-        
-        // Encoded message
-        const e = [1488,1501,32,1488,1514,1501,32,1511,1493,1512,1488,1497,1501,32,1488,1514,32,1494,1492,44,32,1488,1494,32,1499,1504,1512,1488,1492,32,1513,1492,1508,1493,1512,1496,1500,32,1508,1514,1493,1495,46,32,1500,1488,32,1489,1496,1493,1495,32,1488,1501,32,1500,1490,1502,1512,1497,44,32,1500,1488,32,1489,1496,1493,1495,32,1488,1501,32,1494,1492,32,1499,1489,1512,32,1502,1488,1493,1495,1512,32,1502,1491,1497,46,10,1500,1488,32,1514,1499,1504,1504,1493,32,1513,1494,1492,32,1497,1511,1512,1492,32,1499,1499,1492,46,32,1494,1492,32,1500,1488,32,1492,1497,1492,32,1488,1502,1493,1512,32,1500,1492,1497,1493,1514,32,1502,1492,1512,44,32,1493,1492,1511,1502,1506,32,1500,1488,32,1492,1497,1492,32,1488,1502,1493,1512,32,1500,1492,1490,1497,1506,32,1500,1508,1504,1497,32,1513,1492,1493,1488,32,1502,1493,1499,1503,46,10,1488,1504,1495,1504,1493,32,1510,1512,1497,1499,1497,1501,32,1488,1514,32,1492,1513,1491,1512,1503,46,32,1488,1504,1497,32,1497,1493,1491,1506,32,1513,1494,1492,32,1504,1513,1502,1506,32,1502,1493,1494,1512,44,32,1488,1489,1500,32,1488,1497,1503,32,1500,1497,32,1491,1512,1498,32,1488,1495,1512,1514,32,1500,1492,1505,1489,1497,1512,32,1488,1514,32,1494,1492,46,32,1500,1488,32,1488,1514,32,1492,1511,1493,1500,32,1513,1500,1493,44,32,1500,1488,32,1488,1514,32,1492,1513,1501,44,32,1488,1493,1514,1493,46,10,1492,1493,1488,32,1492,1497,1495,1497,1491,32,1513,1492,1513,1506,1493,1503,32,1502,1511,1513,1497,1489,32,1500,1493,46,32,1488,1493,1500,1497,32,1499,1497,32,1492,1493,1488,32,1492,1511,1513,1497,1489,32,1500,1493,32,1511,1493,1491,1501,46,10,1488,1501,32,1492,1493,1488,32,1488,1493,1502,1512,32,1500,1506,1510,1493,1512,44,32,1514,1506,1510,1512,1493,44,32,1490,1501,32,1488,1501,32,1494,1492,32,1504,1512,1488,1492,32,1513,1492,1499,1493,1500,32,1506,1493,1489,1491,46,32,1493,1488,1501,32,1492,1493,1488,32,1488,1493,1502,1512,32,1500,1492,1502,1513,1497,1498,8230,32,1514,1505,1502,1499,1493,32,1506,1500,1497,1493,46,32,1490,1501,32,1488,1501,32,1492,1500,1489,32,1488,1493,1502,1512,32,1502,1513,1492,1493,32,1488,1495,1512,46,10,1497,1499,1493,1500,32,1500,1492,1497,1493,1514,32,1513,1514,1512,1488,1493,32,1491,1489,1512,1497,1501,32,1513,1500,1488,32,1492,1497,1493,32,1513,1501,32,1511,1493,1491,1501,46,32,1497,1499,1493,1500,32,1500,1492,1497,1493,1514,32,1513,1514,1513,1502,1506,1493,32,1488,1493,1514,1493,32,1502,1491,1489,1512,32,1488,1495,1512,1514,46,32,1494,1492,32,1506,1491,1497,1497,1503,32,1492,1493,1488,46,10,1488,1501,32,1502,1497,1513,1492,1493,32,1488,1495,1512,32,1497,1504,1505,1492,32,1500,1492,1495,1500,1497,1507,32,1488,1493,1514,1493,44,32,1488,1500,32,1514,1514,1504,1493,32,1500,1494,1492,32,1500,1511,1512,1493,1514,46,32,1488,1504,1497,32,1500,1488,32,1497,1493,1491,1506,32,1502,1492,32,1511,1493,1512,1492,32,1488,1494,44,32,1493,1488,1504,1497,32,1500,1488,32,1512,1493,1510,1492,32,1500,1491,1506,1514,46,10,1488,1501,32,1497,1513,32,1506,1493,1491,32,1494,1502,1503,44,32,1514,1505,1490,1512,1493,32,1488,1514,32,1492,1508,1493,1512,1496,1500,46,32,1488,1501,32,1488,1497,1503,8230,32,1514,1513,1502,1512,1493,32,1506,1500,1497,1493,46];
-        
-        const myUserId = 'user_' + Math.random().toString(36).substr(2, 9);
-        const pressesRef = ref(database, 'presses');
-        const myPressRef = ref(database, 'presses/' + myUserId);
-        
-        let isPressing = false;
-        let currentPresses = {};
+        // DOM elements
+        const stage1 = document.getElementById('stage1');
+        const stage2 = document.getElementById('stage2');
+        const stage4 = document.getElementById('stage4');
+        const stage5 = document.getElementById('stage5');
+        const breachBtn = document.getElementById('breachBtn');
+        const clickArea = document.getElementById('clickArea');
+        const meterContainer = document.getElementById('meterContainer');
+        const meterBar = document.getElementById('meterBar');
+        const meterLine = document.getElementById('meterLine');
+        const streakCounter = document.getElementById('streakCounter');
+        const stopPortalBtn = document.getElementById('stopPortalBtn');
 
-        // Setup disconnect handler
-        onDisconnect(myPressRef).remove();
+        function getZoneSize() {
+            const progress = streak / maxStreak;
+            return baseZoneSize - (baseZoneSize - minZoneSize) * progress;
+        }
 
-        // Listen for changes in presses
-        onValue(pressesRef, (snapshot) => {
-            currentPresses = snapshot.val() || {};
-            updateDisplay();
-            statusText.textContent = 'מחובר ✓';
-        });
+        function updateZone() {
+            const zoneSize = getZoneSize();
+            meterBar.style.setProperty('--zone-size', `${zoneSize}px`);
+        }
 
-        // Update display
-        function updateDisplay() {
-            const count = Object.keys(currentPresses).length;
-            activeCountEl.textContent = count;
-            
-            // Update progress bars
-            let personIndex = 1;
-            for (let i = 1; i <= 10; i++) {
-                const progressBar = document.getElementById('progress' + i);
-                if (personIndex <= count) {
-                    progressBar.style.height = '100%';
-                    personIndex++;
-                } else {
-                    progressBar.style.height = '0%';
+        function updateStreakDisplay() {
+            streakCounter.textContent = `רצף: ${streak} / ${maxStreak}`;
+        }
+
+        function isInZone() {
+            const linePosition = meterLine.getBoundingClientRect().left;
+            const containerRect = meterContainer.getBoundingClientRect();
+            const containerCenter = containerRect.left + containerRect.width / 2;
+            const zoneSize = getZoneSize();
+            const distance = Math.abs(linePosition - containerCenter);
+            return distance < zoneSize;
+        }
+
+        // Hidden payload - uses simple character shift
+        function _0x2f8b() {
+            const d = (s) => s.split('').map(c => String.fromCharCode(c.charCodeAt(0) - 13)).join('');
+            const _1 = 'םע״צצ9-׮ן׵׷-ם׷-סױע׵ץש-עשם-׭ן׵ת-צע׷׵-׫נצ-׭ף״;';
+            const _2 = '׵ןׯ″';
+            const _3 = 'םש-׷ןצנ-שצ-׶″';
+            const _4 = 'םעצ-ױם״″';
+            const _5 = 'ס״׫ׯ-ס׳שצפ-ש׳ם׷-׫סױע׵ץש-ש׫צ׫נ-׶שרת;';
+            const _6 = 'עףס-מנצע״-׫ס-׶סםנע׬-פצױ׶;';
+            return [_1,_2,_3,_4,_5,_6].map(d);
+        }
+
+        clickArea.addEventListener('click', () => {
+            if (isAnimating) return;
+            if (isInZone()) {
+                streak++;
+                updateStreakDisplay();
+                updateZone();
+                meterContainer.classList.add('flash-success');
+                setTimeout(() => meterContainer.classList.remove('flash-success'), 300);
+                if (streak >= maxStreak) {
+                    setTimeout(() => {
+                        stage2.style.display = 'none';
+                        stage4.style.display = 'flex';
+                    }, 500);
                 }
-            }
-
-            // Update button appearance
-            if (count > 0) {
-                button.classList.add('pressing');
             } else {
-                button.classList.remove('pressing');
+                if (streak > 0) {
+                    meterContainer.classList.add('flash-fail');
+                    setTimeout(() => meterContainer.classList.remove('flash-fail'), 300);
+                }
+                streak = 0;
+                updateStreakDisplay();
+                updateZone();
             }
+        });
 
-            // Check if goal achieved
-            if (count >= 10 && mainScreen.style.display !== 'none') {
-                setTimeout(() => {
-                    // Decode and show note
-                    noteText.textContent = String.fromCharCode(...e);
-                    mainScreen.style.display = 'none';
-                    successScreen.style.display = 'block';
-                }, 300);
-            }
-        }
+        breachBtn.addEventListener('click', () => {
+            stage1.style.display = 'none';
+            stage2.style.display = 'flex';
+            const duration = baseDuration;
+            meterLine.style.animationDuration = `${duration}s`;
+        });
 
-        // Mouse/Touch events
-        button.addEventListener('mousedown', (e) => {
-            e.preventDefault();
-            if (!isPressing) {
-                isPressing = true;
-                set(myPressRef, {
-                    timestamp: Date.now(),
-                    userId: myUserId
+        stopPortalBtn.addEventListener('click', () => {
+            stage4.style.display = 'none';
+            setTimeout(() => {
+                const revealDiv = document.createElement('div');
+                revealDiv.className = 'revelation';
+                const messages = _0x2f8b();
+                messages.forEach((msg) => {
+                    const p = document.createElement('p');
+                    p.textContent = msg;
+                    revealDiv.appendChild(p);
                 });
-            }
+                stage5.innerHTML = '';
+                stage5.appendChild(revealDiv);
+                stage5.style.display = 'flex';
+            }, 100);
         });
 
-        button.addEventListener('mouseup', () => {
-            if (isPressing) {
-                isPressing = false;
-                remove(myPressRef);
-            }
-        });
-
-        button.addEventListener('mouseleave', () => {
-            if (isPressing) {
-                isPressing = false;
-                remove(myPressRef);
-            }
-        });
-
-        // Touch support for mobile
-        button.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            if (!isPressing) {
-                isPressing = true;
-                set(myPressRef, {
-                    timestamp: Date.now(),
-                    userId: myUserId
-                });
-            }
-        });
-
-        button.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            if (isPressing) {
-                isPressing = false;
-                remove(myPressRef);
-            }
-        });
-
-        button.addEventListener('touchcancel', (e) => {
-            e.preventDefault();
-            if (isPressing) {
-                isPressing = false;
-                remove(myPressRef);
-            }
-        });
-
-        // Reset game
-        window.resetGame = function() {
-            // Clear all presses
-            set(pressesRef, null);
-            isPressing = false;
-            mainScreen.style.display = 'block';
-            successScreen.style.display = 'none';
-            updateDisplay();
-        }
-
-        // Cleanup on page unload
-        window.addEventListener('beforeunload', () => {
-            if (isPressing) {
-                remove(myPressRef);
-            }
-        });
+        updateZone();
+        updateStreakDisplay();
     </script>
 </body>
 </html>
