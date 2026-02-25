@@ -518,9 +518,9 @@
             ctx.shadowBlur = 0;
         }
 
-        // Collision detection - rectangle to circle
+        // Better collision detection - push player out of walls
         function checkWallCollision(x, y, radius) {
-            const padding = radius + 2; // Extra padding for safety
+            const padding = radius + 3;
             
             for (let wall of maze.walls) {
                 // Find the closest point on the rectangle to the circle
@@ -533,36 +533,51 @@
                 const distSq = dx * dx + dy * dy;
                 
                 if (distSq < padding * padding) {
-                    return true;
+                    return { collision: true, closestX, closestY, dx, dy, distSq };
                 }
             }
-            return false;
+            return { collision: false };
         }
 
-        // Smooth sliding collision
+        // Move with collision - push out of walls if stuck
         function moveWithCollision(x, y) {
             const radius = player.radius;
+            const collision = checkWallCollision(x, y, radius);
             
-            // Try full movement first
-            if (!checkWallCollision(x, y, radius)) {
+            if (!collision.collision) {
+                // No collision, move freely
                 player.x = x;
                 player.y = y;
                 return;
             }
             
-            // Try x-only movement
-            if (!checkWallCollision(x, player.y, radius)) {
-                player.x = x;
+            // If colliding, try to move out
+            const dist = Math.sqrt(collision.distSq);
+            if (dist === 0) {
+                // Dead center of wall, push in direction of movement
+                if (x !== player.x || y !== player.y) {
+                    const moveAngle = Math.atan2(y - player.y, x - player.x);
+                    player.x = collision.closestX + Math.cos(moveAngle) * (radius + 5);
+                    player.y = collision.closestY + Math.sin(moveAngle) * (radius + 5);
+                }
                 return;
             }
             
-            // Try y-only movement
-            if (!checkWallCollision(player.x, y, radius)) {
-                player.y = y;
-                return;
-            }
+            // Push out of wall in the direction away from it
+            const padding = radius + 3;
+            const angle = Math.atan2(collision.dy, collision.dx);
+            const pushDistance = (padding - dist) + 2;
             
-            // If all movement blocked, stay in place
+            player.x = x + Math.cos(angle) * pushDistance;
+            player.y = y + Math.sin(angle) * pushDistance;
+            
+            // Verify new position is safe
+            const newCollision = checkWallCollision(player.x, player.y, radius);
+            if (newCollision.collision) {
+                // If still colliding, push more aggressively
+                player.x = player.x + Math.cos(angle) * 5;
+                player.y = player.y + Math.sin(angle) * 5;
+            }
         }
 
         function checkPuzzleCollision(x, y) {
@@ -704,14 +719,8 @@
                 newY -= dx * moveDistance;
             }
 
-            // Check collision
-            if (!checkWallCollision(newX, newY, player.radius)) {
-                player.x = newX;
-                player.y = newY;
-            } else {
-                // Use smooth sliding collision
-                moveWithCollision(newX, newY);
-            }
+            // Always use collision-aware movement
+            moveWithCollision(newX, newY);
 
             // Check puzzle collision
             checkPuzzleCollision(player.x, player.y);
@@ -726,6 +735,13 @@
 
         // Initialize
         createMaze();
+        
+        // Ensure player starts in safe position
+        while (checkWallCollision(player.x, player.y, player.radius).collision) {
+            player.x += 10;
+            player.y += 10;
+        }
+        
         updateHUD();
         gameLoop();
     </script>
