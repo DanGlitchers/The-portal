@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>פרופיל משתמש</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <title>מבוך 2D - פאזלים סודיים</title>
     <style>
         * {
             margin: 0;
@@ -15,648 +12,722 @@
         }
 
         body {
-            font-family: 'Heebo', sans-serif;
-            background: #0a0a0a;
-            color: #e0e0e0;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Stage 1 - User Profile (TikTok-style) */
-        .stage-1 {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            background: #121212;
-            animation: fadeIn 2s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .profile-header {
-            padding: 20px;
-            border-bottom: 1px solid #1a1a1a;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .back-arrow {
-            font-size: 1.5rem;
-            color: #666;
-        }
-
-        .profile-menu {
-            font-size: 1.5rem;
-            color: #666;
-        }
-
-        .profile-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px 20px;
-        }
-
-        .profile-avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, #1a1a1a, #0a0a0a);
-            border: 2px solid #222;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            color: #333;
-        }
-
-        .username {
-            font-size: 1.5rem;
-            font-weight: 500;
-            color: #e0e0e0;
-            margin-bottom: 8px;
-        }
-
-        .user-handle {
-            font-size: 0.95rem;
-            color: #666;
-            margin-bottom: 25px;
-        }
-
-        .profile-stats {
-            display: flex;
-            gap: 40px;
-            margin-bottom: 25px;
-            padding: 20px 0;
-        }
-
-        .stat {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .stat-number {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #e0e0e0;
-            margin-bottom: 4px;
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            color: #666;
-        }
-
-        .follow-button {
-            padding: 12px 60px;
-            background: #1a1a1a;
-            border: 1px solid #282828;
-            color: #808080;
-            font-size: 1rem;
-            font-weight: 500;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-bottom: 30px;
-            transition: all 0.3s ease;
-        }
-
-        .follow-button:hover {
-            background: #222;
-            border-color: #333;
-        }
-
-        .bio {
-            max-width: 400px;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .cryptic-message {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: #707070;
-            letter-spacing: 0.5px;
-        }
-
-        .videos-section {
-            width: 100%;
-            padding: 30px 20px;
-            border-top: 1px solid #1a1a1a;
-        }
-
-        .videos-header {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
             display: flex;
             justify-content: center;
-            gap: 50px;
-            margin-bottom: 20px;
-        }
-
-        .tab {
-            font-size: 0.9rem;
-            color: #666;
-            padding-bottom: 12px;
-            cursor: pointer;
-        }
-
-        .tab.active {
-            color: #e0e0e0;
-            border-bottom: 2px solid #e0e0e0;
-        }
-
-        .videos-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .video-placeholder {
-            aspect-ratio: 9/16;
-            background: #0d0d0d;
-            position: relative;
+            align-items: center;
+            min-height: 100vh;
+            color: #00ff00;
             overflow: hidden;
         }
 
-        .video-placeholder::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 30% 40%, rgba(20, 20, 20, 0.5) 0%, transparent 50%),
-                radial-gradient(circle at 70% 60%, rgba(15, 15, 15, 0.5) 0%, transparent 50%);
+        .game-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
-        .breach-button {
+        canvas {
+            display: block;
+            background: radial-gradient(circle at 50% 50%, #0a0a0a, #000);
+            border: 3px solid #00ff00;
+            box-shadow: 0 0 40px rgba(0, 255, 0, 0.4), inset 0 0 40px rgba(0, 255, 0, 0.1);
+            max-width: 90vw;
+            max-height: 90vh;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+
+        .hud {
             position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 14px 40px;
-            background: rgba(10, 10, 10, 0.95);
-            border: 1px solid #2a2a2a;
-            color: #707070;
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            letter-spacing: 2px;
-            backdrop-filter: blur(10px);
-            z-index: 100;
-        }
-
-        .breach-button:hover {
-            border-color: #404040;
-            color: #909090;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
-        }
-
-        /* Stage 2 & 3 - Breach System */
-        .stage-2 {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 40px;
-            background: #000;
-        }
-
-        .system-header {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 0.9rem;
-            color: #444;
-            margin-bottom: 80px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            animation: glitch 0.5s ease-in;
-        }
-
-        @keyframes glitch {
-            0%, 100% { opacity: 1; transform: translateX(0); }
-            25% { opacity: 0.8; transform: translateX(-2px); }
-            50% { opacity: 1; transform: translateX(2px); }
-            75% { opacity: 0.9; transform: translateX(-1px); }
-        }
-
-        .timing-game {
-            width: 100%;
-            max-width: 800px;
-        }
-
-        .streak-counter {
-            text-align: center;
-            margin-bottom: 60px;
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 1rem;
-            color: #555;
-            letter-spacing: 2px;
-        }
-
-        .meter-container {
-            position: relative;
-            width: 100%;
-            height: 60px;
-            background: #0d0d0d;
-            border: 1px solid #1a1a1a;
-            margin-bottom: 40px;
-            overflow: hidden;
-        }
-
-        .meter-bar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                transparent calc(50% - var(--zone-size, 60px)), 
-                rgba(0, 255, 100, 0.15) calc(50% - var(--zone-size, 60px)), 
-                rgba(0, 255, 100, 0.3) 50%, 
-                rgba(0, 255, 100, 0.15) calc(50% + var(--zone-size, 60px)), 
-                transparent calc(50% + var(--zone-size, 60px)),
-                transparent 100%
-            );
-        }
-
-        .meter-line {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 2px;
-            height: 100%;
-            background: #fff;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-            animation: sweep linear infinite;
-        }
-
-        @keyframes sweep {
-            0% { left: 0; }
-            50% { left: calc(100% - 2px); }
-            100% { left: 0; }
-        }
-
-        .click-area {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            cursor: crosshair;
+            top: 20px;
+            right: 20px;
+            background: rgba(10, 10, 10, 0.9);
+            border: 2px solid #00ff00;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            max-width: 280px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
             z-index: 10;
         }
 
-        .instruction {
-            text-align: center;
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 0.85rem;
-            color: #333;
-            letter-spacing: 1px;
+        .hud-title {
+            color: #00ff00;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px #00ff00;
+            font-size: 1.2em;
         }
 
-        /* Stage 4 - Success */
-        .stage-4 {
+        .hud-item {
+            margin: 10px 0;
+            padding: 8px;
+            border-left: 3px solid #00ff00;
+            padding-left: 12px;
+            color: #00aa00;
+            transition: all 0.3s ease;
+        }
+
+        .hud-item.collected {
+            color: #00ff00;
+            border-left-color: #00ff00;
+            text-shadow: 0 0 5px #00ff00;
+        }
+
+        .puzzle-status {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #00ff00;
+            color: #00ff00;
+            font-weight: bold;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(10, 10, 10, 0.9);
+            border: 2px solid #00ff00;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            color: #00aa00;
+        }
+
+        .controls > div {
+            margin: 5px 0;
+        }
+
+        .exit-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #00ff00, #00aa00);
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+        }
+
+        .exit-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.8);
+        }
+
+        .exit-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* Modal Styles */
+        .modal {
             display: none;
-            flex-direction: column;
-            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 100;
             justify-content: center;
-            min-height: 100vh;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(10, 10, 10, 0.98);
+            border: 3px solid #00ff00;
+            border-radius: 10px;
             padding: 40px;
-            background: #000;
-            animation: fadeIn 1s ease-in;
-        }
-
-        .access-granted {
+            max-width: 500px;
+            width: 90%;
             text-align: center;
-            margin-bottom: 60px;
+            box-shadow: 0 0 50px rgba(0, 255, 0, 0.4);
+            animation: slideUp 0.4s ease;
         }
 
-        .access-text {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 1.1rem;
-            color: #00ff64;
-            letter-spacing: 3px;
-            margin-bottom: 80px;
-            animation: pulse 2s ease-in-out infinite;
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-title {
+            font-size: 2em;
+            font-weight: bold;
+            color: #00ff00;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        .modal-text {
+            color: #00aa00;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            text-align: center;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: #00ff00;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+        }
+
+        .modal-button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #00ff00, #00aa00);
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        .modal-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
+        }
+
+        .error-message {
+            color: #ff0000;
+            margin-top: 10px;
+            display: none;
+            animation: shake 0.3s ease;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* Success Modal */
+        .success-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.98);
+            z-index: 101;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .success-modal.active {
+            display: flex;
+        }
+
+        .success-content {
+            background: rgba(10, 20, 10, 0.98);
+            border: 3px solid #00ff00;
+            border-radius: 10px;
+            padding: 50px 40px;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 0 60px rgba(0, 255, 0, 0.5);
+            animation: popUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes popUp {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .success-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #00ff00;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px #00ff00;
+            animation: pulse 1s infinite;
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
-        .final-button {
-            padding: 16px 40px;
-            background: transparent;
-            border: 1px solid #00ff64;
-            color: #00ff64;
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 1rem;
+        .success-message {
+            color: #00aa00;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .link-display {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+        }
+
+        .copy-button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #00ff00, #00aa00);
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
             cursor: pointer;
             transition: all 0.3s ease;
-            letter-spacing: 2px;
-            text-transform: uppercase;
         }
 
-        .final-button:hover {
-            background: rgba(0, 255, 100, 0.1);
-            box-shadow: 0 0 30px rgba(0, 255, 100, 0.3);
+        .copy-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
         }
 
-        /* Stage 5 - The Twist */
-        .stage-5 {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 60px;
-            background: #000;
-        }
-
-        .revelation {
-            max-width: 700px;
-            font-family: 'IBM Plex Mono', monospace;
-            line-height: 2;
-            color: #999;
-        }
-
-        .revelation p {
-            margin-bottom: 40px;
+        .copy-msg {
+            color: #00ff00;
+            margin-top: 10px;
             opacity: 0;
-            animation: revealText 0.8s ease-in forwards;
-            font-size: 1rem;
+            transition: opacity 0.3s ease;
         }
 
-        .revelation p:nth-child(1) {
-            animation-delay: 0.5s;
-        }
-
-        .revelation p:nth-child(2) {
-            animation-delay: 2.5s;
-            color: #bbb;
-        }
-
-        .revelation p:nth-child(3) {
-            animation-delay: 4s;
-            color: #ddd;
-        }
-
-        .revelation p:nth-child(4) {
-            animation-delay: 5.5s;
-            color: #ff6b6b;
-            font-weight: 500;
-            font-size: 1.1rem;
-        }
-
-        .revelation p:nth-child(5) {
-            animation-delay: 7.5s;
-            color: #ff4444;
-            font-weight: 500;
-            font-size: 1.15rem;
-        }
-
-        .revelation p:nth-child(6) {
-            animation-delay: 10s;
-            color: #ff0000;
-            font-weight: 700;
-            font-size: 1.2rem;
-            text-align: center;
-            letter-spacing: 2px;
-        }
-
-        @keyframes revealText {
-            from { 
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to { 
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* Feedback effects */
-        @keyframes flashSuccess {
-            0%, 100% { background: #0d0d0d; }
-            50% { background: rgba(0, 255, 100, 0.1); }
-        }
-
-        @keyframes flashFail {
-            0%, 100% { background: #0d0d0d; }
-            50% { background: rgba(255, 0, 0, 0.1); }
-        }
-
-        .flash-success {
-            animation: flashSuccess 0.3s ease-out;
-        }
-
-        .flash-fail {
-            animation: flashFail 0.3s ease-out;
+        .copy-msg.show {
+            opacity: 1;
         }
     </style>
 </head>
 <body>
-    <!-- Stage 1: User Profile (TikTok-style) -->
-    <div class="stage-1" id="stage1">
-        <div class="profile-header">
-            <div class="back-arrow">←</div>
-            <div class="profile-menu">⋮</div>
-        </div>
-        
-        <div class="profile-content">
-            <div class="profile-avatar">👁</div>
-            <div class="username">האדון</div>
-            <div class="user-handle">@the.master</div>
-            
-            <div class="profile-stats">
-                <div class="stat">
-                    <div class="stat-number">0</div>
-                    <div class="stat-label">עוקבים</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">∞</div>
-                    <div class="stat-label">עוקב</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">1</div>
-                    <div class="stat-label">לייקים</div>
-                </div>
-            </div>
-            
-            <button class="follow-button">עקוב</button>
-            
-            <div class="bio">
-                <p class="cryptic-message">הזמן כבר לא סופר אתכם.<br>אתם סופרים אותו.</p>
-            </div>
-        </div>
-        
-        <div class="videos-section">
-            <div class="videos-header">
-                <div class="tab active">סרטונים</div>
-                <div class="tab">אהבתי</div>
-            </div>
-            <div class="videos-grid">
-                <div class="video-placeholder"></div>
-                <div class="video-placeholder"></div>
-                <div class="video-placeholder"></div>
-                <div class="video-placeholder"></div>
-                <div class="video-placeholder"></div>
-                <div class="video-placeholder"></div>
-            </div>
-        </div>
-        
-        <button class="breach-button" id="breachBtn">לפרוץ לעמוד</button>
+    <div class="game-container">
+        <canvas id="mazeCanvas"></canvas>
     </div>
 
-    <!-- Stage 2 & 3: Breach System / Timing Game -->
-    <div class="stage-2" id="stage2">
-        <div class="system-header">ייצוב גישה</div>
-        <div class="timing-game">
-            <div class="streak-counter" id="streakCounter">רצף: 0 / 10</div>
-            <div class="meter-container" id="meterContainer">
-                <div class="meter-bar" id="meterBar"></div>
-                <div class="meter-line" id="meterLine"></div>
-                <div class="click-area" id="clickArea"></div>
-            </div>
-            <div class="instruction">לחץ בזמן המדויק</div>
+    <!-- HUD -->
+    <div class="hud">
+        <div class="hud-title">📍 מצב המשחק</div>
+        <div class="hud-item" id="puzzle-1">○ 76 #1</div>
+        <div class="hud-item" id="puzzle-2">○ 81 #2</div>
+        <div class="hud-item" id="puzzle-3">○ 99 #3</div>
+        <div class="puzzle-status">
+            אספת: <span id="puzzle-count">0</span>/3
         </div>
     </div>
 
-    <!-- Stage 4: Access Granted -->
-    <div class="stage-4" id="stage4">
-        <div class="access-granted">
-            <div class="access-text">גישה נפתחה</div>
-            <button class="final-button" id="stopPortalBtn">לעצור את הפורטל</button>
+    <!-- Controls -->
+    <div class="controls">
+        <div>⬆️ W - כיוון מסתכל</div>
+        <div>⬅️ A - שמאל</div>
+        <div>⬇️ S - אחורה</div>
+        <div>➡️ D - ימין</div>
+        <div style="margin-top: 10px; color: #00ff00;">
+            🔍 חפש פתקים!
         </div>
     </div>
 
-    <!-- Stage 5: The Twist -->
-    <div class="stage-5" id="stage5"></div>
+    <!-- Exit Button -->
+    <button class="exit-btn" id="exit-btn" disabled>צא מהמבוך</button>
+
+    <!-- Password Modal -->
+    <div class="modal" id="password-modal">
+        <div class="modal-content">
+            <div class="modal-title">🔐 סיסמה</div>
+            <div class="modal-text">הכנס את המספרים מהפתקים בסדר הנכון</div>
+            <input type="password" class="password-input" id="password-input" placeholder="הכנס סיסמה" onkeypress="if(event.key==='Enter') checkPassword()">
+            <div>
+                <button class="modal-button" onclick="checkPassword()">אימות</button>
+                <button class="modal-button" onclick="closePassword()" style="background: #333;">ביטול</button>
+            </div>
+            <div class="error-message" id="error-msg">❌ סיסמה שגויה!</div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="success-modal" id="success-modal">
+        <div class="success-content">
+            <div class="success-title">✨ הצלחה! ✨</div>
+            <div class="success-message">פתחת את דלת המבוך!<br>הנה הקישור למשהו מיוחד...</div>
+            <div class="link-display">https://imgur.com/a/R4JvHpZ</div>
+            <button class="copy-button" onclick="copyLink()">📋 העתק קישור</button>
+            <div class="copy-msg" id="copy-msg">✓ הקישור הועתק!</div>
+        </div>
+    </div>
 
     <script>
-        // Game state
-        let streak = 0;
-        let isAnimating = false;
-        const maxStreak = 10;
-        const baseZoneSize = 60;
-        const minZoneSize = 15;
-        const baseDuration = 3;
+        const canvas = document.getElementById('mazeCanvas');
+        const ctx = canvas.getContext('2d');
 
-        // DOM elements
-        const stage1 = document.getElementById('stage1');
-        const stage2 = document.getElementById('stage2');
-        const stage4 = document.getElementById('stage4');
-        const stage5 = document.getElementById('stage5');
-        const breachBtn = document.getElementById('breachBtn');
-        const clickArea = document.getElementById('clickArea');
-        const meterContainer = document.getElementById('meterContainer');
-        const meterBar = document.getElementById('meterBar');
-        const meterLine = document.getElementById('meterLine');
-        const streakCounter = document.getElementById('streakCounter');
-        const stopPortalBtn = document.getElementById('stopPortalBtn');
+        // Canvas size - larger maze
+        canvas.width = 1200;
+        canvas.height = 1000;
 
-        function getZoneSize() {
-            const progress = streak / maxStreak;
-            return baseZoneSize - (baseZoneSize - minZoneSize) * progress;
+        // Game variables
+        const player = {
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            radius: 8,
+            angle: 0,
+            speed: 3
+        };
+
+        const maze = {
+            walls: [],
+            puzzles: [
+                { x: 200, y: 200, text: '76 #1', id: 1, collected: false },
+                { x: 1000, y: 200, text: '81 #2', id: 2, collected: false },
+                { x: 600, y: 850, text: '99 #3', id: 3, collected: false }
+            ]
+        };
+
+        // Create maze walls - larger and more complex
+        function createMaze() {
+            const walls = [];
+            
+            // Border walls
+            walls.push({ x: 0, y: 0, w: canvas.width, h: 25 }); // top
+            walls.push({ x: 0, y: canvas.height - 25, w: canvas.width, h: 25 }); // bottom
+            walls.push({ x: 0, y: 0, w: 25, h: canvas.height }); // left
+            walls.push({ x: canvas.width - 25, y: 0, w: 25, h: canvas.height }); // right
+
+            // Complex internal maze
+            walls.push({ x: 100, y: 100, w: 400, h: 25 });
+            walls.push({ x: 100, y: 100, w: 25, h: 350 });
+            walls.push({ x: 475, y: 200, w: 25, h: 250 });
+            walls.push({ x: 150, y: 450, w: 350, h: 25 });
+            walls.push({ x: 550, y: 100, w: 25, h: 400 });
+            walls.push({ x: 550, y: 475, w: 200, h: 25 });
+            walls.push({ x: 800, y: 150, w: 25, h: 350 });
+            walls.push({ x: 650, y: 500, w: 200, h: 25 });
+            walls.push({ x: 200, y: 600, w: 25, h: 250 });
+            walls.push({ x: 225, y: 750, w: 250, h: 25 });
+            walls.push({ x: 750, y: 600, w: 25, h: 200 });
+            walls.push({ x: 850, y: 800, w: 25, h: 100 });
+            walls.push({ x: 300, y: 300, w: 150, h: 25 });
+            walls.push({ x: 600, y: 350, w: 150, h: 25 });
+            walls.push({ x: 900, y: 250, w: 25, h: 350 });
+            walls.push({ x: 50, y: 800, w: 200, h: 25 });
+            walls.push({ x: 400, y: 850, w: 25, h: 125 });
+
+            maze.walls = walls;
         }
 
-        function updateZone() {
-            const zoneSize = getZoneSize();
-            meterBar.style.setProperty('--zone-size', `${zoneSize}px`);
+        // Draw functions
+        function drawWalls() {
+            ctx.fillStyle = '#00ff00';
+            ctx.shadowColor = 'rgba(0, 255, 0, 0.5)';
+            ctx.shadowBlur = 10;
+            
+            maze.walls.forEach(wall => {
+                ctx.fillRect(wall.x, wall.y, wall.w, wall.h);
+            });
+            
+            ctx.shadowBlur = 0;
         }
 
-        function updateStreakDisplay() {
-            streakCounter.textContent = `רצף: ${streak} / ${maxStreak}`;
-        }
-
-        function isInZone() {
-            const linePosition = meterLine.getBoundingClientRect().left;
-            const containerRect = meterContainer.getBoundingClientRect();
-            const containerCenter = containerRect.left + containerRect.width / 2;
-            const zoneSize = getZoneSize();
-            const distance = Math.abs(linePosition - containerCenter);
-            return distance < zoneSize;
-        }
-
-        // Hidden payload - uses simple character shift
-        function _0x2f8b() {
-            const d = (s) => s.split('').map(c => String.fromCharCode(c.charCodeAt(0) - 13)).join('');
-            const _1 = 'םע״צצ9-׮ן׵׷-ם׷-סױע׵ץש-עשם-׭ן׵ת-צע׷׵-׫נצ-׭ף״;';
-            const _2 = '׵ןׯ″';
-            const _3 = 'םש-׷ןצנ-שצ-׶″';
-            const _4 = 'םעצ-ױם״″';
-            const _5 = 'ס״׫ׯ-ס׳שצפ-ש׳ם׷-׫סױע׵ץש-ש׫צ׫נ-׶שרת;';
-            const _6 = 'עףס-מנצע״-׫ס-׶סםנע׬-פצױ׶;';
-            return [_1,_2,_3,_4,_5,_6].map(d);
-        }
-
-        clickArea.addEventListener('click', () => {
-            if (isAnimating) return;
-            if (isInZone()) {
-                streak++;
-                updateStreakDisplay();
-                updateZone();
-                meterContainer.classList.add('flash-success');
-                setTimeout(() => meterContainer.classList.remove('flash-success'), 300);
-                if (streak >= maxStreak) {
-                    setTimeout(() => {
-                        stage2.style.display = 'none';
-                        stage4.style.display = 'flex';
-                    }, 500);
+        function drawPuzzles() {
+            maze.puzzles.forEach(puzzle => {
+                if (!puzzle.collected) {
+                    // Draw paper background
+                    ctx.fillStyle = '#ffffdd';
+                    ctx.shadowColor = 'rgba(255, 255, 150, 0.6)';
+                    ctx.shadowBlur = 15;
+                    ctx.fillRect(puzzle.x - 25, puzzle.y - 25, 50, 50);
+                    
+                    // Draw border
+                    ctx.strokeStyle = '#333333';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(puzzle.x - 25, puzzle.y - 25, 50, 50);
+                    
+                    // Draw text
+                    ctx.fillStyle = '#333333';
+                    ctx.font = 'bold 12px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(puzzle.text, puzzle.x, puzzle.y);
+                    
+                    ctx.shadowBlur = 0;
                 }
+            });
+        }
+
+        function drawPlayer() {
+            ctx.fillStyle = '#00ff00';
+            ctx.shadowColor = 'rgba(0, 255, 0, 0.8)';
+            ctx.shadowBlur = 15;
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Draw direction
+            ctx.strokeStyle = '#00ff00';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(player.x, player.y);
+            ctx.lineTo(
+                player.x + Math.cos(player.angle) * 15,
+                player.y + Math.sin(player.angle) * 15
+            );
+            ctx.stroke();
+            
+            ctx.shadowBlur = 0;
+        }
+
+        // Collision detection - rectangle to circle
+        function checkWallCollision(x, y, radius) {
+            const padding = radius + 2; // Extra padding for safety
+            
+            for (let wall of maze.walls) {
+                // Find the closest point on the rectangle to the circle
+                const closestX = Math.max(wall.x, Math.min(x, wall.x + wall.w));
+                const closestY = Math.max(wall.y, Math.min(y, wall.y + wall.h));
+                
+                // Distance between circle center and closest point
+                const dx = x - closestX;
+                const dy = y - closestY;
+                const distSq = dx * dx + dy * dy;
+                
+                if (distSq < padding * padding) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Smooth sliding collision
+        function moveWithCollision(x, y) {
+            const radius = player.radius;
+            
+            // Try full movement first
+            if (!checkWallCollision(x, y, radius)) {
+                player.x = x;
+                player.y = y;
+                return;
+            }
+            
+            // Try x-only movement
+            if (!checkWallCollision(x, player.y, radius)) {
+                player.x = x;
+                return;
+            }
+            
+            // Try y-only movement
+            if (!checkWallCollision(player.x, y, radius)) {
+                player.y = y;
+                return;
+            }
+            
+            // If all movement blocked, stay in place
+        }
+
+        function checkPuzzleCollision(x, y) {
+            for (let puzzle of maze.puzzles) {
+                if (!puzzle.collected) {
+                    const dist = Math.hypot(x - puzzle.x, y - puzzle.y);
+                    if (dist < 40) {
+                        puzzle.collected = true;
+                        updateHUD();
+                        return;
+                    }
+                }
+            }
+        }
+
+        // Update HUD
+        function updateHUD() {
+            let count = 0;
+            maze.puzzles.forEach((p, idx) => {
+                const element = document.getElementById(`puzzle-${idx + 1}`);
+                if (p.collected) {
+                    element.classList.add('collected');
+                    element.textContent = '✓ ' + p.text;
+                    count++;
+                } else {
+                    element.classList.remove('collected');
+                    element.textContent = '○ ' + p.text;
+                }
+            });
+            
+            document.getElementById('puzzle-count').textContent = count;
+            
+            const exitBtn = document.getElementById('exit-btn');
+            if (count === 3) {
+                exitBtn.disabled = false;
+                exitBtn.style.opacity = '1';
             } else {
-                if (streak > 0) {
-                    meterContainer.classList.add('flash-fail');
-                    setTimeout(() => meterContainer.classList.remove('flash-fail'), 300);
-                }
-                streak = 0;
-                updateStreakDisplay();
-                updateZone();
+                exitBtn.disabled = true;
+                exitBtn.style.opacity = '0.3';
+            }
+        }
+
+        // Controls
+        const keys = {};
+        window.addEventListener('keydown', (e) => {
+            keys[e.key.toLowerCase()] = true;
+        });
+        window.addEventListener('keyup', (e) => {
+            keys[e.key.toLowerCase()] = false;
+        });
+
+        // Mouse controls
+        document.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            player.angle = Math.atan2(mouseY - player.y, mouseX - player.x);
+        });
+
+        // Exit button
+        document.getElementById('exit-btn').addEventListener('click', () => {
+            const collected = maze.puzzles.filter(p => p.collected).length;
+            if (collected === 3) {
+                document.getElementById('password-modal').classList.add('active');
+                document.getElementById('password-input').focus();
             }
         });
 
-        breachBtn.addEventListener('click', () => {
-            stage1.style.display = 'none';
-            stage2.style.display = 'flex';
-            const duration = baseDuration;
-            meterLine.style.animationDuration = `${duration}s`;
-        });
+        function closePassword() {
+            document.getElementById('password-modal').classList.remove('active');
+        }
 
-        stopPortalBtn.addEventListener('click', () => {
-            stage4.style.display = 'none';
-            setTimeout(() => {
-                const revealDiv = document.createElement('div');
-                revealDiv.className = 'revelation';
-                const messages = _0x2f8b();
-                messages.forEach((msg) => {
-                    const p = document.createElement('p');
-                    p.textContent = msg;
-                    revealDiv.appendChild(p);
-                });
-                stage5.innerHTML = '';
-                stage5.appendChild(revealDiv);
-                stage5.style.display = 'flex';
-            }, 100);
-        });
+        function checkPassword() {
+            const input = document.getElementById('password-input').value;
+            if (input === '768199') {
+                closePassword();
+                document.getElementById('success-modal').classList.add('active');
+            } else {
+                document.getElementById('error-msg').classList.add('show');
+                document.getElementById('password-input').value = '';
+                setTimeout(() => {
+                    document.getElementById('error-msg').classList.remove('show');
+                }, 2000);
+            }
+        }
 
-        updateZone();
-        updateStreakDisplay();
+        function copyLink() {
+            navigator.clipboard.writeText('https://imgur.com/a/R4JvHpZ').then(() => {
+                const msg = document.getElementById('copy-msg');
+                msg.classList.add('show');
+                setTimeout(() => msg.classList.remove('show'), 2000);
+            });
+        }
+
+        // Game loop
+        function gameLoop() {
+            // Clear canvas
+            ctx.fillStyle = 'rgba(10, 10, 10, 0.95)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw grid background
+            ctx.strokeStyle = 'rgba(0, 255, 0, 0.05)';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < canvas.width; i += 50) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, canvas.height);
+                ctx.stroke();
+            }
+            for (let i = 0; i < canvas.height; i += 50) {
+                ctx.beginPath();
+                ctx.moveTo(0, i);
+                ctx.lineTo(canvas.width, i);
+                ctx.stroke();
+            }
+
+            // Handle movement
+            let newX = player.x;
+            let newY = player.y;
+
+            const moveDistance = player.speed;
+            const dx = Math.cos(player.angle);
+            const dy = Math.sin(player.angle);
+
+            if (keys['w'] || keys['arrowup']) {
+                newX += dx * moveDistance;
+                newY += dy * moveDistance;
+            }
+            if (keys['s'] || keys['arrowdown']) {
+                newX -= dx * moveDistance;
+                newY -= dy * moveDistance;
+            }
+            if (keys['a'] || keys['arrowleft']) {
+                newX -= dy * moveDistance;
+                newY += dx * moveDistance;
+            }
+            if (keys['d'] || keys['arrowright']) {
+                newX += dy * moveDistance;
+                newY -= dx * moveDistance;
+            }
+
+            // Check collision
+            if (!checkWallCollision(newX, newY, player.radius)) {
+                player.x = newX;
+                player.y = newY;
+            } else {
+                // Use smooth sliding collision
+                moveWithCollision(newX, newY);
+            }
+
+            // Check puzzle collision
+            checkPuzzleCollision(player.x, player.y);
+
+            // Draw everything
+            drawWalls();
+            drawPuzzles();
+            drawPlayer();
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Initialize
+        createMaze();
+        updateHUD();
+        gameLoop();
     </script>
 </body>
 </html>
